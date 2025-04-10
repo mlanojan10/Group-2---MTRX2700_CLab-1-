@@ -1,0 +1,4 @@
+"./Src/assembly.o"
+"./Src/definitions.o"
+"./Src/initialise.o"
+"./Startup/startup_stm32f303vctx.o"
