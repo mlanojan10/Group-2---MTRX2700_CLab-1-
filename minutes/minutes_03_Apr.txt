@@ -1,22 +1,18 @@
-03/04/25 3pm-5pm
+10/04/25 3pm-5pm
 
-Attendees: Zhenyu Dai, Jacqueline Ford, Melvin Lanojan
+Attendees: Sharon Britto, Luc Do, Melvin Lanojan, Johnny Wang
 
 Topics Covered: 
-  Splitting up tasks
-  Meetings outside of the lab
+  Cleaning up code comments
+  Integration task
 
 Key Discussions: 
-  When is everyone free
-  Mode of communication
+  How to approach integration task
+  Meeting next week outside of tutorial
 
 Decisions made:
-  Communicate through instagram
-  Send files via discord / email
+  Send files via GitHub
 
 Actionables:
-  Sharon does exercise 1
-  Johnny does exercise 2
-  Melvin and Luc do exercise 3
-  Group chat on instagram made
+  Work integration tasks
   Meet on Thursdays 11:30am
