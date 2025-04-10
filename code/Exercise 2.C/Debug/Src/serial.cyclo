@@ -1,0 +1,7 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Src/serial.c:36:6:SerialInitialise	1
+../Src/serial.c:63:6:SerialOutputChar	2
+../Src/serial.c:68:6:SerialOutputString	3
+../Src/serial.c:79:9:SerialGetChar	2
+../Src/serial.c:84:6:SerialSetReceiveCallback	1
+../Src/serial.c:88:6:USART1_EXTI25_IRQHandler	7
