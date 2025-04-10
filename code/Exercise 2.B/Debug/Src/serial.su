@@ -1,0 +1,6 @@
+../Src/serial.c:42:6:SerialInitialise	32	static
+../Src/serial.c:100:6:SerialOutputChar	16	static
+../Src/serial.c:110:6:SerialOutputString	24	static
+../Src/serial.c:124:9:SerialGetChar	16	static
+../Src/serial.c:131:6:SerialInputLine	32	static
+../Src/serial.c:154:6:SerialSetReceiveCallback	16	static

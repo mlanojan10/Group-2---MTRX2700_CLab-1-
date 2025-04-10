@@ -1,0 +1,6 @@
+../Src/serial.c:42:6:SerialInitialise	6
+../Src/serial.c:100:6:SerialOutputChar	2
+../Src/serial.c:110:6:SerialOutputString	2
+../Src/serial.c:124:9:SerialGetChar	2
+../Src/serial.c:131:6:SerialInputLine	5
+../Src/serial.c:154:6:SerialSetReceiveCallback	1
