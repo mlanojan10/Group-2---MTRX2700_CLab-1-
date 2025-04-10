@@ -1,0 +1,18 @@
+10/04/25 2pm-5pm
+
+Attendees: Sharon Britto, Luc Do, Melvin Lanojan, Johnny Wang
+
+Topics Covered: 
+  Cleaning up code comments
+  Integration task
+
+Key Discussions: 
+  How to approach integration task
+  Meeting next week outside of tutorial
+
+Decisions made:
+  Send files via GitHub
+
+Actionables:
+  Work integration tasks
+  Meet on Thursdays 11:30am
