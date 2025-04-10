@@ -1,0 +1,3 @@
+../Src/leds.c:5:6:leds_init	1
+../Src/leds.c:15:9:leds_get_state	1
+../Src/leds.c:22:6:leds_set_state	1

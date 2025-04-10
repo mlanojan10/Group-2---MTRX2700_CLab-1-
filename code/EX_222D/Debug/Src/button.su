@@ -1,0 +1,6 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	16	static
+../Src/button.c:11:6:configure_timer	8	static
+../Src/button.c:30:6:TIM2_IRQHandler	4	static
+../Src/button.c:39:6:EXTI0_IRQHandler	8	static
+../Src/button.c:56:6:button_init	16	static
