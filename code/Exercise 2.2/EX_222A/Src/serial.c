@@ -3,47 +3,49 @@
 
 #include "stm32f303xc.h"
 
+// Structure defining parameters for a specific serial port
 // We store the pointers to the GPIO and USART that are used
 //  for a specific serial port. To add another serial port
 //  you need to select the appropriate values.
 struct _SerialPort {
-	USART_TypeDef *UART;
-	GPIO_TypeDef *GPIO;
+	USART_TypeDef *UART;  // Pointer to the USART hardware
+	GPIO_TypeDef *GPIO;   // Pointer to the GPIO port used
 	volatile uint32_t MaskAPB2ENR;	// mask to enable RCC APB2 bus registers
 	volatile uint32_t MaskAPB1ENR;	// mask to enable RCC APB1 bus registers
 	volatile uint32_t MaskAHBENR;	// mask to enable RCC AHB bus registers
-	volatile uint32_t SerialPinModeValue;
-	volatile uint32_t SerialPinSpeedValue;
-	volatile uint32_t SerialPinAlternatePinValueLow;
-	volatile uint32_t SerialPinAlternatePinValueHigh;
-	void (*completion_function)(uint32_t);
+	volatile uint32_t SerialPinModeValue;        // Value to set pin mode to Alternate Function
+	volatile uint32_t SerialPinSpeedValue;       // Value to set high speed for GPIO pins
+	volatile uint32_t SerialPinAlternatePinValueLow;   // Low register for alternate function
+	volatile uint32_t SerialPinAlternatePinValueHigh;  // High register for alternate function
+	void (*completion_function)(uint32_t);             // Optional callback after transmission
 };
 
 
-
+// Define an instance of SerialPort for USART1 (PC10 and PC11 used)
 // instantiate the serial port parameters
 //   note: the complexity is hidden in the c file
-SerialPort USART1_PORT = {USART1,
-		GPIOC,
-		RCC_APB2ENR_USART1EN, // bit to enable for APB2 bus
-		0x00,	// bit to enable for APB1 bus
-		RCC_AHBENR_GPIOCEN, // bit to enable for AHB bus
-		0xA00,
-		0xF00,
-		0x770000,  // for USART1 PC10 and 11, this is in the AFR low register
-		0x00, // no change to the high alternate function register
-		0x00 // default function pointer is NULL
+SerialPort USART1_PORT = {
+		USART1,               // USART1 hardware
+		GPIOC,                // GPIOC used for TX/RX
+		RCC_APB2ENR_USART1EN, // Enable USART1 on APB2 bus
+		0x00,	              // No APB1 usage
+		RCC_AHBENR_GPIOCEN,   // Enable GPIOC on AHB bus
+		0xA00,                // Set PC10, PC11 to Alternate Function mode
+		0xF00,                // Set PC10, PC11 to high speed
+		0x770000,             // Alternate function mapping for PC10 and PC11 (AF7)
+		0x00,                 // No change to high AFR
+		0x00                  // No completion function by default
 		};
 
 
+// Initialises the specified serial port with a baud rate and optional completion function
 // InitialiseSerial - Initialise the serial port
 // Input: baudRate is from an enumerated set
 void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*completion_function)(uint32_t)) {
 
-	serial_port->completion_function = completion_function;
+	serial_port->completion_function = completion_function; // Set the callback
 
-	// enable clock power, system configuration clock and GPIOC
-	// common to all UARTs
+	// Enable power interface and system configuration controller
 	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 
@@ -96,52 +98,54 @@ void SerialInitialise(uint32_t baudRate, SerialPort *serial_port, void (*complet
 }
 
 
+// Sends a single byte over the USART
 void SerialOutputChar(uint8_t data, SerialPort *serial_port) {
 
-	while((serial_port->UART->ISR & USART_ISR_TXE) == 0){
+	while((serial_port->UART->ISR & USART_ISR_TXE) == 0){ // Wait until transmit buffer is empty
 	}
 
-	serial_port->UART->TDR = data;
+	serial_port->UART->TDR = data; // Write data to transmit data register
 }
 
 
-
+// Sends a null-terminated string over the USART
 void SerialOutputString(uint8_t *pt, SerialPort *serial_port) {
 
 	uint32_t counter = 0;
 	while(*pt) {
-		SerialOutputChar(*pt, serial_port);
+		SerialOutputChar(*pt, serial_port); // Send each character
 		counter++;
 		pt++;
 	}
 
+	// Call the optional completion function with number of bytes sent
 	serial_port->completion_function(counter);
 }
 
 
-
+// Receives a single byte from the USART (blocking)
 uint8_t SerialGetChar(SerialPort *serial_port) {
-	while ((serial_port->UART->ISR & USART_ISR_RXNE) == 0);
-	return serial_port->UART->RDR;
+	while ((serial_port->UART->ISR & USART_ISR_RXNE) == 0); // Wait until data is received
+	return serial_port->UART->RDR;                          // Return received byte
 }
 
 
-
+// Receives a full line of input from the serial port, terminated by newline or carriage return
 void SerialInputLine(char *buffer, uint32_t max_len, SerialPort *serial_port) {
     uint32_t i = 0;
 
     while (i < max_len - 1) {
-        char c = SerialGetChar(serial_port);
+        char c = SerialGetChar(serial_port);   // Receive character
 
-        // Echo the character back as feedback
+        // Echo character back
         SerialOutputChar(c, serial_port);
 
-        if (c == '\r' || c == '\n') {
+        if (c == '\r' || c == '\n') {   // Stop if Enter is pressed
             break;
         }
 
-        buffer[i++] = c;
+        buffer[i++] = c;   // Store character in buffer
     }
 
-    buffer[i] = '\0'; // Null-terminate
+    buffer[i] = '\0'; // Null-terminate the string
 }
