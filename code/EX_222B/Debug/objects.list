@@ -1,4 +1,4 @@
-"./Src/button.o"
+"./Src/digitalio.o"
 "./Src/main.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"

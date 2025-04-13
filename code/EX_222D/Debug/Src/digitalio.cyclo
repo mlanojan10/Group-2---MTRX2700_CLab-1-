@@ -1,0 +1,9 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	2
+../Src/digitalio.c:14:6:configure_timer	1
+../Src/digitalio.c:33:6:TIM2_IRQHandler	1
+../Src/digitalio.c:42:6:EXTI0_IRQHandler	3
+../Src/digitalio.c:59:6:button_init	1
+../Src/digitalio.c:86:6:leds_init	1
+../Src/digitalio.c:93:9:leds_get_state	1
+../Src/digitalio.c:100:6:leds_set_state	1

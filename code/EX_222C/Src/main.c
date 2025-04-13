@@ -5,8 +5,7 @@
 
 #include <stdint.h>
 #include <stm32f303xc.h>
-#include "button.h"   // include the button module
-#include "leds.h"     // include the new LED module
+#include "digitalio.h"   // include the button module
 
 void enable_clocks() {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
@@ -21,9 +20,6 @@ void chase_led(void) {
     static uint8_t led_mask = 0;
     static uint8_t direction = 1;
 
-    // Get the current state of the LEDs
-    led_mask = leds_get_state();
-
     if (direction) {
         led_mask = (led_mask << 1) | 1;
         if (led_mask == 0xFF) {
@@ -36,9 +32,9 @@ void chase_led(void) {
         }
     }
 
-    // Set the new state of the LEDs
     leds_set_state(led_mask);
 }
+
 
 void test_callback(void) {
     // This function is for testing purposes only and should be used to test the callback functionality.

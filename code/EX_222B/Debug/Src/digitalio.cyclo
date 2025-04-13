@@ -1,0 +1,4 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	2
+../Src/digitalio.c:7:6:EXTI0_IRQHandler	2
+../Src/digitalio.c:16:6:button_init	1

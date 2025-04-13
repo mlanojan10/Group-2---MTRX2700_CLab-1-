@@ -1,0 +1,7 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	16	static
+../Src/digitalio.c:7:6:EXTI0_IRQHandler	8	static
+../Src/digitalio.c:16:6:button_init	16	static
+../Src/digitalio.c:40:6:leds_init	4	static
+../Src/digitalio.c:50:9:leds_get_state	16	static
+../Src/digitalio.c:57:6:leds_set_state	16	static

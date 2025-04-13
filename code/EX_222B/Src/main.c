@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stm32f303xc.h>
 
-#include "button.h"   // include the button module
+#include "digitalio.h"   // include the button module
 //#include "leds.h"     // you'll create this soon
 
 void enable_clocks() {
@@ -68,7 +68,7 @@ int main(void)
 	//button_init(chase_led);
 
 	//Testing Line (make sure to comment the above button_init function first
-	button_init(test_callback);
+	button_init(chase_led);
 
 	while (1) {
 		// main loop can stay empty

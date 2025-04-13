@@ -1,3 +1,0 @@
-../Src/leds.c:5:6:leds_init	16	static
-../Src/leds.c:12:9:leds_get_state	16	static
-../Src/leds.c:19:6:leds_set_state	16	static
