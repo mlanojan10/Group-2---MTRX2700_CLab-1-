@@ -1,0 +1,5 @@
+../Src/main.c:11:6:enable_clocks	1
+../Src/main.c:15:6:initialise_board	1
+../Src/main.c:20:6:chase_led	4
+../Src/main.c:40:6:test_callback	3
+../Src/main.c:62:5:main	1
