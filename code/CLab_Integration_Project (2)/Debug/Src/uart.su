@@ -1,0 +1,8 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	16	static
+../Src/uart.c:39:6:SerialInitialise	32	static
+../Src/uart.c:62:6:SerialOutputChar	16	static
+../Src/uart.c:67:6:SerialOutputString	16	static
+../Src/uart.c:73:9:SerialGetChar	16	static
+../Src/uart.c:78:6:SerialSetReceiveCallback	16	static
+../Src/uart.c:82:6:SerialStartTransmission	16	static
+../Src/uart.c:88:6:USART1_EXTI25_IRQHandler	16	static
