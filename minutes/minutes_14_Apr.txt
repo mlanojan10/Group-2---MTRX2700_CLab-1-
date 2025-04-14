@@ -1,10 +1,11 @@
-14/04/25 1pm-4pm
+14/04/25 1pm-4pm, 6pm-7pm
 
-Attendees: Sharon Britto, Luc Do, Melvin Lanojan
+Attendees: Sharon Britto, Luc Do, Melvin Lanojan, Johnny Wang
 
 Topics Covered: 
   Integration task
   ReadMe file
+  Fix timer module
 
 Key Discussions: 
   Integrating all the codes together
@@ -12,6 +13,7 @@ Key Discussions:
 Decisions made:
   Luc and Sharon work on making the integration task functional and working
   Melvin went through the hints and discussion questions to ensure the integration code followed them.
+  Johnny fixed up the timer module to work with the integration task
 
 Actionables:
   Work on timer section on the integration task
