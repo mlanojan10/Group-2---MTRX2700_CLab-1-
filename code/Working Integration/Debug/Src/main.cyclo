@@ -1,0 +1,4 @@
+../Src/main.c:12:5:__io_putchar	1
+../Src/main.c:28:6:reset_all_modes	1
+../Src/main.c:41:6:OnLineReceived	6
+../Src/main.c:81:5:main	1

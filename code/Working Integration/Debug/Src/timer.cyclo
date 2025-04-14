@@ -1,0 +1,15 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	2
+../Src/timer.c:9:6:timer_enable_clocks	1
+../Src/timer.c:15:6:timer_initialise_board	1
+../Src/timer.c:21:6:turn_off_led_callback	1
+../Src/timer.c:28:6:trigger_prescaler	1
+../Src/timer.c:44:6:init_timer_module	1
+../Src/timer.c:59:6:change_pattern	1
+../Src/timer.c:66:6:TIM2_IRQHandler	4
+../Src/timer.c:87:6:enable_timer2_interrupt	1
+../Src/timer.c:105:10:get_timer_period	1
+../Src/timer.c:111:6:set_timer_period	1
+../Src/timer.c:117:6:reset_timer	1
+../Src/timer.c:129:6:Timer_SetPeriodic	1
+../Src/timer.c:133:6:Timer_TriggerOneShot	1
