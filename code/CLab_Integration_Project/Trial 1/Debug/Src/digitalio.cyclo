@@ -1,0 +1,13 @@
+../Inc/core_cm4.h:1688:22:__NVIC_EnableIRQ	2
+../Inc/core_cm4.h:1816:22:__NVIC_SetPriority	2
+../Src/digitalio.c:7:6:enable_clocks	1
+../Src/digitalio.c:11:6:chase_led	4
+../Src/digitalio.c:30:6:test_callback	3
+../Src/digitalio.c:52:6:display_pattern_callback	4
+../Src/digitalio.c:71:6:pattern_callback_init	1
+../Src/digitalio.c:75:6:trigger_pattern_display	2
+../Src/digitalio.c:86:6:EXTI0_IRQHandler	2
+../Src/digitalio.c:95:6:button_init	1
+../Src/digitalio.c:122:6:initialise_board	1
+../Src/digitalio.c:132:9:leds_get_state	1
+../Src/digitalio.c:139:6:leds_set_state	1
