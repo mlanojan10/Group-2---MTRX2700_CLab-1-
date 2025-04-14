@@ -1,0 +1,19 @@
+14/04/25 1pm-4pm
+
+Attendees: Sharon Britto, Luc Do, Melvin Lanojan
+
+Topics Covered: 
+  Integration task
+  ReadMe file
+
+Key Discussions: 
+  Integrating all the codes together
+
+Decisions made:
+  Luc and Sharon work on making the integration task functional and working
+  Melvin went through the hints and discussion questions to ensure the integration code followed them.
+
+Actionables:
+  Work on timer section on the integration task
+  Clean up code and comments
+  Finish the ReadMe file
