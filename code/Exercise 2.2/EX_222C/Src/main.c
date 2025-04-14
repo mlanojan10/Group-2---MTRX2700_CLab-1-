@@ -1,35 +1,75 @@
+//EX 2.2.2 C is an improved modularised code using Get and Set functions
+//Modular Implementation is controlled by led.h function, please go to those files for explanation
+//Instead of directly manipulating GPIOE->ODR in chase_led, the code now uses leds_get_state()
+//to read the LED state and leds_set_state() to update it.
+
 #include <stdint.h>
-#include <stdio.h>
-#include <string.h>
+#include <stm32f303xc.h>
+#include "digitalio.h"   // include the button module
 
-#include "serial.h"
-#include "stm32f303xc.h"
-
-void OnLineReceived(char *string, uint32_t length) {
-    printf("> You typed: %s\r\n", string);
-    printf("> Echo: %s\r\n\r\n", string);
-    printf("> ");  // Print prompt again
+void enable_clocks() {
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
 }
 
-int __io_putchar(int ch) {
-    SerialOutputChar((uint8_t)ch, &USART1_PORT); // Send character to USART1
-    return ch;
+void initialise_board() {
+    // Initialize the LEDs using the new LED module
+    leds_init();
+}
+
+void chase_led(void) {
+    static uint8_t led_mask = 0;
+    static uint8_t direction = 1;
+
+    if (direction) {
+        led_mask = (led_mask << 1) | 1;
+        if (led_mask == 0xFF) {
+            direction = 0;
+        }
+    } else {
+        led_mask >>= 1;
+        if (led_mask == 0x00) {
+            direction = 1;
+        }
+    }
+
+    leds_set_state(led_mask);
+}
+
+
+void test_callback(void) {
+    // This function is for testing purposes only and should be used to test the callback functionality.
+    // For now, it just turns on PE8, waits a bit, and then turns it off.
+    // Afterwards, it starts the chase LED function.
+
+    // Turn on PE8 (LED)
+    GPIOE->ODR |= (1 << 8);
+
+    // Simple software delay (you can adjust the delay loop to make it more visible)
+    for (volatile int i = 0; i < 1000000; i++) {}  // Increase delay time for visibility
+
+    // Turn off PE8 (LED)
+    GPIOE->ODR &= ~(1 << 8);
+
+    // Simple software delay to ensure the LED stays off for a short period
+    for (volatile int i = 0; i < 1000000; i++) {}  // Adjust delay time here
+
+    // Then call the chase_led function
+    chase_led();
+}
+
+void display_led_pattern(uint8_t pattern) {
+    leds_set_state(pattern);
 }
 
 int main(void) {
-	// Initialize USART1 at 115200 baud rate with default settings
-    SerialInitialise(BAUD_115200, &USART1_PORT, NULL);
+    enable_clocks();
+    initialise_board();
 
-    // Register the callback function for received lines
-    SerialSetReceiveCallback(&USART1_PORT, OnLineReceived);
+    // Register chase_led as a button press callback
+    //button_init(chase_led);
 
-    __enable_irq();  // Enable global interrupts
-
-    // Initial welcome message
-    printf("USART1 is ready. Type a line and press Enter:\r\n");
-    printf("> ");
 
     while (1) {
-        // Nothing needed here – receive is handled via interrupts
+        // main loop can stay empty
     }
 }
