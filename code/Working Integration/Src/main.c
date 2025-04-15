@@ -47,7 +47,16 @@ void OnLineReceived(char *input, uint32_t len) {
     reset_all_modes();
 
     if (strcmp(command, "led") == 0) {
-        DigitalIO_SetPattern(argument);
+        //Integration Main Functionality
+    	DigitalIO_SetPattern(argument);
+
+    	//Testing Function - without timer:
+    	//button_init(chase_led);
+    	//button_init(test_callback);
+
+    	//To show function with timer embedded, please refer to code within EX_222D
+    	//There is issues with having TIM2_IRQHandler defined twice in the project for the Timer Interface and this
+
         current_mode = MODE_LED;
         SerialStartTransmission("LED pattern set.\r\n> ");
     }
