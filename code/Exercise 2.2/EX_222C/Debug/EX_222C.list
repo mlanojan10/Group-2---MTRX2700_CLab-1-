@@ -29,25 +29,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  00002004  2**0
                   CONTENTS, READONLY
- 13 .debug_info   00000c67  00000000  00000000  00002034  2**0
+ 13 .debug_info   00000aea  00000000  00000000  00002034  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00000398  00000000  00000000  00002c9b  2**0
+ 14 .debug_abbrev 00000322  00000000  00000000  00002b1e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 000000b8  00000000  00000000  00003038  2**3
+ 15 .debug_aranges 000000b8  00000000  00000000  00002e40  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 0000007b  00000000  00000000  000030f0  2**0
+ 16 .debug_rnglists 0000007b  00000000  00000000  00002ef8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00014d64  00000000  00000000  0000316b  2**0
+ 17 .debug_macro  00014d64  00000000  00000000  00002f73  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00000b81  00000000  00000000  00017ecf  2**0
+ 18 .debug_line   00000b85  00000000  00000000  00017cd7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000726c8  00000000  00000000  00018a50  2**0
+ 19 .debug_str    000726c8  00000000  00000000  0001885c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  0008b118  2**0
+ 20 .comment      00000043  00000000  00000000  0008af24  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  000001e4  00000000  00000000  0008b15c  2**2
+ 21 .debug_frame  000001e4  00000000  00000000  0008af68  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 0000005b  00000000  00000000  0008b340  2**0
+ 22 .debug_line_str 0000005b  00000000  00000000  0008b14c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -170,294 +170,298 @@ __STATIC_INLINE void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
  800025c:	e000e100 	.word	0xe000e100
  8000260:	e000ed00 	.word	0xe000ed00
 
-08000264 <EXTI0_IRQHandler>:
+08000264 <enable_clocks>:
+#include "digitalio.h"
+#include <stm32f303xc.h>
+
+
+
+void enable_clocks() {
+ 8000264:	b480      	push	{r7}
+ 8000266:	af00      	add	r7, sp, #0
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
+ 8000268:	4b05      	ldr	r3, [pc, #20]	@ (8000280 <enable_clocks+0x1c>)
+ 800026a:	695b      	ldr	r3, [r3, #20]
+ 800026c:	4a04      	ldr	r2, [pc, #16]	@ (8000280 <enable_clocks+0x1c>)
+ 800026e:	f443 1328 	orr.w	r3, r3, #2752512	@ 0x2a0000
+ 8000272:	6153      	str	r3, [r2, #20]
+}
+ 8000274:	bf00      	nop
+ 8000276:	46bd      	mov	sp, r7
+ 8000278:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800027c:	4770      	bx	lr
+ 800027e:	bf00      	nop
+ 8000280:	40021000 	.word	0x40021000
+
+08000284 <initialise_board>:
+
+void initialise_board() {
+ 8000284:	b580      	push	{r7, lr}
+ 8000286:	af00      	add	r7, sp, #0
+    // Initialize the LEDs using the new LED module
+    leds_init();
+ 8000288:	f000 f87a 	bl	8000380 <leds_init>
+}
+ 800028c:	bf00      	nop
+ 800028e:	bd80      	pop	{r7, pc}
+
+08000290 <chase_led>:
+
+void chase_led(void) {
+ 8000290:	b580      	push	{r7, lr}
+ 8000292:	af00      	add	r7, sp, #0
+    static uint8_t led_mask = 0;
+    static uint8_t direction = 1;
+
+    if (direction) {
+ 8000294:	4b14      	ldr	r3, [pc, #80]	@ (80002e8 <chase_led+0x58>)
+ 8000296:	781b      	ldrb	r3, [r3, #0]
+ 8000298:	2b00      	cmp	r3, #0
+ 800029a:	d011      	beq.n	80002c0 <chase_led+0x30>
+        led_mask = (led_mask << 1) | 1;
+ 800029c:	4b13      	ldr	r3, [pc, #76]	@ (80002ec <chase_led+0x5c>)
+ 800029e:	781b      	ldrb	r3, [r3, #0]
+ 80002a0:	005b      	lsls	r3, r3, #1
+ 80002a2:	b25b      	sxtb	r3, r3
+ 80002a4:	f043 0301 	orr.w	r3, r3, #1
+ 80002a8:	b25b      	sxtb	r3, r3
+ 80002aa:	b2da      	uxtb	r2, r3
+ 80002ac:	4b0f      	ldr	r3, [pc, #60]	@ (80002ec <chase_led+0x5c>)
+ 80002ae:	701a      	strb	r2, [r3, #0]
+        if (led_mask == 0xFF) {
+ 80002b0:	4b0e      	ldr	r3, [pc, #56]	@ (80002ec <chase_led+0x5c>)
+ 80002b2:	781b      	ldrb	r3, [r3, #0]
+ 80002b4:	2bff      	cmp	r3, #255	@ 0xff
+ 80002b6:	d110      	bne.n	80002da <chase_led+0x4a>
+            direction = 0;
+ 80002b8:	4b0b      	ldr	r3, [pc, #44]	@ (80002e8 <chase_led+0x58>)
+ 80002ba:	2200      	movs	r2, #0
+ 80002bc:	701a      	strb	r2, [r3, #0]
+ 80002be:	e00c      	b.n	80002da <chase_led+0x4a>
+        }
+    } else {
+        led_mask >>= 1;
+ 80002c0:	4b0a      	ldr	r3, [pc, #40]	@ (80002ec <chase_led+0x5c>)
+ 80002c2:	781b      	ldrb	r3, [r3, #0]
+ 80002c4:	085b      	lsrs	r3, r3, #1
+ 80002c6:	b2da      	uxtb	r2, r3
+ 80002c8:	4b08      	ldr	r3, [pc, #32]	@ (80002ec <chase_led+0x5c>)
+ 80002ca:	701a      	strb	r2, [r3, #0]
+        if (led_mask == 0x00) {
+ 80002cc:	4b07      	ldr	r3, [pc, #28]	@ (80002ec <chase_led+0x5c>)
+ 80002ce:	781b      	ldrb	r3, [r3, #0]
+ 80002d0:	2b00      	cmp	r3, #0
+ 80002d2:	d102      	bne.n	80002da <chase_led+0x4a>
+            direction = 1;
+ 80002d4:	4b04      	ldr	r3, [pc, #16]	@ (80002e8 <chase_led+0x58>)
+ 80002d6:	2201      	movs	r2, #1
+ 80002d8:	701a      	strb	r2, [r3, #0]
+        }
+    }
+
+    leds_set_state(led_mask);
+ 80002da:	4b04      	ldr	r3, [pc, #16]	@ (80002ec <chase_led+0x5c>)
+ 80002dc:	781b      	ldrb	r3, [r3, #0]
+ 80002de:	4618      	mov	r0, r3
+ 80002e0:	f000 f86c 	bl	80003bc <leds_set_state>
+}
+ 80002e4:	bf00      	nop
+ 80002e6:	bd80      	pop	{r7, pc}
+ 80002e8:	20000000 	.word	0x20000000
+ 80002ec:	20000024 	.word	0x20000024
+
+080002f0 <EXTI0_IRQHandler>:
 
 // Static variable only accessible in this file
 static button_callback_t on_button_press = 0x00;
 
 void EXTI0_IRQHandler(void)
 {
- 8000264:	b580      	push	{r7, lr}
- 8000266:	af00      	add	r7, sp, #0
+ 80002f0:	b580      	push	{r7, lr}
+ 80002f2:	af00      	add	r7, sp, #0
 	if (on_button_press != 0x00) {
- 8000268:	4b07      	ldr	r3, [pc, #28]	@ (8000288 <EXTI0_IRQHandler+0x24>)
- 800026a:	681b      	ldr	r3, [r3, #0]
- 800026c:	2b00      	cmp	r3, #0
- 800026e:	d002      	beq.n	8000276 <EXTI0_IRQHandler+0x12>
+ 80002f4:	4b07      	ldr	r3, [pc, #28]	@ (8000314 <EXTI0_IRQHandler+0x24>)
+ 80002f6:	681b      	ldr	r3, [r3, #0]
+ 80002f8:	2b00      	cmp	r3, #0
+ 80002fa:	d002      	beq.n	8000302 <EXTI0_IRQHandler+0x12>
 		on_button_press();
- 8000270:	4b05      	ldr	r3, [pc, #20]	@ (8000288 <EXTI0_IRQHandler+0x24>)
- 8000272:	681b      	ldr	r3, [r3, #0]
- 8000274:	4798      	blx	r3
+ 80002fc:	4b05      	ldr	r3, [pc, #20]	@ (8000314 <EXTI0_IRQHandler+0x24>)
+ 80002fe:	681b      	ldr	r3, [r3, #0]
+ 8000300:	4798      	blx	r3
 	}
 
 	EXTI->PR |= EXTI_PR_PR0; // clear interrupt flag
- 8000276:	4b05      	ldr	r3, [pc, #20]	@ (800028c <EXTI0_IRQHandler+0x28>)
- 8000278:	695b      	ldr	r3, [r3, #20]
- 800027a:	4a04      	ldr	r2, [pc, #16]	@ (800028c <EXTI0_IRQHandler+0x28>)
- 800027c:	f043 0301 	orr.w	r3, r3, #1
- 8000280:	6153      	str	r3, [r2, #20]
+ 8000302:	4b05      	ldr	r3, [pc, #20]	@ (8000318 <EXTI0_IRQHandler+0x28>)
+ 8000304:	695b      	ldr	r3, [r3, #20]
+ 8000306:	4a04      	ldr	r2, [pc, #16]	@ (8000318 <EXTI0_IRQHandler+0x28>)
+ 8000308:	f043 0301 	orr.w	r3, r3, #1
+ 800030c:	6153      	str	r3, [r2, #20]
 }
- 8000282:	bf00      	nop
- 8000284:	bd80      	pop	{r7, pc}
- 8000286:	bf00      	nop
- 8000288:	20000020 	.word	0x20000020
- 800028c:	40010400 	.word	0x40010400
+ 800030e:	bf00      	nop
+ 8000310:	bd80      	pop	{r7, pc}
+ 8000312:	bf00      	nop
+ 8000314:	20000020 	.word	0x20000020
+ 8000318:	40010400 	.word	0x40010400
 
-08000290 <button_init>:
+0800031c <button_init>:
 
 void button_init(button_callback_t callback)
 {
- 8000290:	b580      	push	{r7, lr}
- 8000292:	b082      	sub	sp, #8
- 8000294:	af00      	add	r7, sp, #0
- 8000296:	6078      	str	r0, [r7, #4]
+ 800031c:	b580      	push	{r7, lr}
+ 800031e:	b082      	sub	sp, #8
+ 8000320:	af00      	add	r7, sp, #0
+ 8000322:	6078      	str	r0, [r7, #4]
 	on_button_press = callback;
- 8000298:	4a12      	ldr	r2, [pc, #72]	@ (80002e4 <button_init+0x54>)
- 800029a:	687b      	ldr	r3, [r7, #4]
- 800029c:	6013      	str	r3, [r2, #0]
+ 8000324:	4a12      	ldr	r2, [pc, #72]	@ (8000370 <button_init+0x54>)
+ 8000326:	687b      	ldr	r3, [r7, #4]
+ 8000328:	6013      	str	r3, [r2, #0]
 
 	// Enable SYSCFG clock
 	RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
- 800029e:	4b12      	ldr	r3, [pc, #72]	@ (80002e8 <button_init+0x58>)
- 80002a0:	699b      	ldr	r3, [r3, #24]
- 80002a2:	4a11      	ldr	r2, [pc, #68]	@ (80002e8 <button_init+0x58>)
- 80002a4:	f043 0301 	orr.w	r3, r3, #1
- 80002a8:	6193      	str	r3, [r2, #24]
+ 800032a:	4b12      	ldr	r3, [pc, #72]	@ (8000374 <button_init+0x58>)
+ 800032c:	699b      	ldr	r3, [r3, #24]
+ 800032e:	4a11      	ldr	r2, [pc, #68]	@ (8000374 <button_init+0x58>)
+ 8000330:	f043 0301 	orr.w	r3, r3, #1
+ 8000334:	6193      	str	r3, [r2, #24]
 
 	// Configure PA0 as input (default after reset, so can be skipped technically)
 
 	// Map PA0 to EXTI0
 	SYSCFG->EXTICR[0] &= ~SYSCFG_EXTICR1_EXTI0; // 0x00 = PA0
- 80002aa:	4b10      	ldr	r3, [pc, #64]	@ (80002ec <button_init+0x5c>)
- 80002ac:	689b      	ldr	r3, [r3, #8]
- 80002ae:	4a0f      	ldr	r2, [pc, #60]	@ (80002ec <button_init+0x5c>)
- 80002b0:	f023 030f 	bic.w	r3, r3, #15
- 80002b4:	6093      	str	r3, [r2, #8]
+ 8000336:	4b10      	ldr	r3, [pc, #64]	@ (8000378 <button_init+0x5c>)
+ 8000338:	689b      	ldr	r3, [r3, #8]
+ 800033a:	4a0f      	ldr	r2, [pc, #60]	@ (8000378 <button_init+0x5c>)
+ 800033c:	f023 030f 	bic.w	r3, r3, #15
+ 8000340:	6093      	str	r3, [r2, #8]
 
 	// Set rising edge trigger
 	EXTI->RTSR |= EXTI_RTSR_TR0;
- 80002b6:	4b0e      	ldr	r3, [pc, #56]	@ (80002f0 <button_init+0x60>)
- 80002b8:	689b      	ldr	r3, [r3, #8]
- 80002ba:	4a0d      	ldr	r2, [pc, #52]	@ (80002f0 <button_init+0x60>)
- 80002bc:	f043 0301 	orr.w	r3, r3, #1
- 80002c0:	6093      	str	r3, [r2, #8]
+ 8000342:	4b0e      	ldr	r3, [pc, #56]	@ (800037c <button_init+0x60>)
+ 8000344:	689b      	ldr	r3, [r3, #8]
+ 8000346:	4a0d      	ldr	r2, [pc, #52]	@ (800037c <button_init+0x60>)
+ 8000348:	f043 0301 	orr.w	r3, r3, #1
+ 800034c:	6093      	str	r3, [r2, #8]
 
 	// Unmask EXTI0
 	EXTI->IMR |= EXTI_IMR_MR0;
- 80002c2:	4b0b      	ldr	r3, [pc, #44]	@ (80002f0 <button_init+0x60>)
- 80002c4:	681b      	ldr	r3, [r3, #0]
- 80002c6:	4a0a      	ldr	r2, [pc, #40]	@ (80002f0 <button_init+0x60>)
- 80002c8:	f043 0301 	orr.w	r3, r3, #1
- 80002cc:	6013      	str	r3, [r2, #0]
+ 800034e:	4b0b      	ldr	r3, [pc, #44]	@ (800037c <button_init+0x60>)
+ 8000350:	681b      	ldr	r3, [r3, #0]
+ 8000352:	4a0a      	ldr	r2, [pc, #40]	@ (800037c <button_init+0x60>)
+ 8000354:	f043 0301 	orr.w	r3, r3, #1
+ 8000358:	6013      	str	r3, [r2, #0]
 
 	// Set NVIC priority and enable EXTI0 interrupt
 	NVIC_SetPriority(EXTI0_IRQn, 1);
- 80002ce:	2101      	movs	r1, #1
- 80002d0:	2006      	movs	r0, #6
- 80002d2:	f7ff ff9d 	bl	8000210 <__NVIC_SetPriority>
+ 800035a:	2101      	movs	r1, #1
+ 800035c:	2006      	movs	r0, #6
+ 800035e:	f7ff ff57 	bl	8000210 <__NVIC_SetPriority>
 	NVIC_EnableIRQ(EXTI0_IRQn);
- 80002d6:	2006      	movs	r0, #6
- 80002d8:	f7ff ff7c 	bl	80001d4 <__NVIC_EnableIRQ>
+ 8000362:	2006      	movs	r0, #6
+ 8000364:	f7ff ff36 	bl	80001d4 <__NVIC_EnableIRQ>
 }
- 80002dc:	bf00      	nop
- 80002de:	3708      	adds	r7, #8
- 80002e0:	46bd      	mov	sp, r7
- 80002e2:	bd80      	pop	{r7, pc}
- 80002e4:	20000020 	.word	0x20000020
- 80002e8:	40021000 	.word	0x40021000
- 80002ec:	40010000 	.word	0x40010000
- 80002f0:	40010400 	.word	0x40010400
+ 8000368:	bf00      	nop
+ 800036a:	3708      	adds	r7, #8
+ 800036c:	46bd      	mov	sp, r7
+ 800036e:	bd80      	pop	{r7, pc}
+ 8000370:	20000020 	.word	0x20000020
+ 8000374:	40021000 	.word	0x40021000
+ 8000378:	40010000 	.word	0x40010000
+ 800037c:	40010400 	.word	0x40010400
 
-080002f4 <leds_init>:
+08000380 <leds_init>:
+
+
+//-------------------------LED CONTROL -----------------------
 
 // LED GPIO Initialization (GPIOE, assuming LEDs are connected here)
 void leds_init(void) {
- 80002f4:	b480      	push	{r7}
- 80002f6:	af00      	add	r7, sp, #0
+ 8000380:	b480      	push	{r7}
+ 8000382:	af00      	add	r7, sp, #0
     // Enable clock for GPIOE
     RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
- 80002f8:	4b0b      	ldr	r3, [pc, #44]	@ (8000328 <leds_init+0x34>)
- 80002fa:	695b      	ldr	r3, [r3, #20]
- 80002fc:	4a0a      	ldr	r2, [pc, #40]	@ (8000328 <leds_init+0x34>)
- 80002fe:	f443 1300 	orr.w	r3, r3, #2097152	@ 0x200000
- 8000302:	6153      	str	r3, [r2, #20]
+ 8000384:	4b0b      	ldr	r3, [pc, #44]	@ (80003b4 <leds_init+0x34>)
+ 8000386:	695b      	ldr	r3, [r3, #20]
+ 8000388:	4a0a      	ldr	r2, [pc, #40]	@ (80003b4 <leds_init+0x34>)
+ 800038a:	f443 1300 	orr.w	r3, r3, #2097152	@ 0x200000
+ 800038e:	6153      	str	r3, [r2, #20]
 
     // Set pins PE8-PE15 as output
     GPIOE->MODER &= ~(0xFFFF0000);  // Clear mode bits for PE8-PE15
- 8000304:	4b09      	ldr	r3, [pc, #36]	@ (800032c <leds_init+0x38>)
- 8000306:	681b      	ldr	r3, [r3, #0]
- 8000308:	4a08      	ldr	r2, [pc, #32]	@ (800032c <leds_init+0x38>)
- 800030a:	b29b      	uxth	r3, r3
- 800030c:	6013      	str	r3, [r2, #0]
+ 8000390:	4b09      	ldr	r3, [pc, #36]	@ (80003b8 <leds_init+0x38>)
+ 8000392:	681b      	ldr	r3, [r3, #0]
+ 8000394:	4a08      	ldr	r2, [pc, #32]	@ (80003b8 <leds_init+0x38>)
+ 8000396:	b29b      	uxth	r3, r3
+ 8000398:	6013      	str	r3, [r2, #0]
     GPIOE->MODER |= 0x55550000;     // Set PE8-PE15 to output mode (01)
- 800030e:	4b07      	ldr	r3, [pc, #28]	@ (800032c <leds_init+0x38>)
- 8000310:	681b      	ldr	r3, [r3, #0]
- 8000312:	4a06      	ldr	r2, [pc, #24]	@ (800032c <leds_init+0x38>)
- 8000314:	f043 43aa 	orr.w	r3, r3, #1426063360	@ 0x55000000
- 8000318:	f443 03aa 	orr.w	r3, r3, #5570560	@ 0x550000
- 800031c:	6013      	str	r3, [r2, #0]
+ 800039a:	4b07      	ldr	r3, [pc, #28]	@ (80003b8 <leds_init+0x38>)
+ 800039c:	681b      	ldr	r3, [r3, #0]
+ 800039e:	4a06      	ldr	r2, [pc, #24]	@ (80003b8 <leds_init+0x38>)
+ 80003a0:	f043 43aa 	orr.w	r3, r3, #1426063360	@ 0x55000000
+ 80003a4:	f443 03aa 	orr.w	r3, r3, #5570560	@ 0x550000
+ 80003a8:	6013      	str	r3, [r2, #0]
 }
- 800031e:	bf00      	nop
- 8000320:	46bd      	mov	sp, r7
- 8000322:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8000326:	4770      	bx	lr
- 8000328:	40021000 	.word	0x40021000
- 800032c:	48001000 	.word	0x48001000
+ 80003aa:	bf00      	nop
+ 80003ac:	46bd      	mov	sp, r7
+ 80003ae:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80003b2:	4770      	bx	lr
+ 80003b4:	40021000 	.word	0x40021000
+ 80003b8:	48001000 	.word	0x48001000
 
-08000330 <leds_set_state>:
+080003bc <leds_set_state>:
     state = (GPIOE->ODR >> 8) & 0xFF;  // Read ODR for PE8-PE15 and mask lower 8 bits
     return state;
 }
 
 // Set the state of the LEDs (PE8 to PE15 using a bitmask)
 void leds_set_state(uint8_t state) {
- 8000330:	b480      	push	{r7}
- 8000332:	b083      	sub	sp, #12
- 8000334:	af00      	add	r7, sp, #0
- 8000336:	4603      	mov	r3, r0
- 8000338:	71fb      	strb	r3, [r7, #7]
+ 80003bc:	b480      	push	{r7}
+ 80003be:	b083      	sub	sp, #12
+ 80003c0:	af00      	add	r7, sp, #0
+ 80003c2:	4603      	mov	r3, r0
+ 80003c4:	71fb      	strb	r3, [r7, #7]
     GPIOE->ODR = (GPIOE->ODR & 0x00FF) | (state << 8); // Set only PE8-PE15
- 800033a:	4b07      	ldr	r3, [pc, #28]	@ (8000358 <leds_set_state+0x28>)
- 800033c:	695b      	ldr	r3, [r3, #20]
- 800033e:	b2da      	uxtb	r2, r3
- 8000340:	79fb      	ldrb	r3, [r7, #7]
- 8000342:	021b      	lsls	r3, r3, #8
- 8000344:	4904      	ldr	r1, [pc, #16]	@ (8000358 <leds_set_state+0x28>)
- 8000346:	4313      	orrs	r3, r2
- 8000348:	614b      	str	r3, [r1, #20]
+ 80003c6:	4b07      	ldr	r3, [pc, #28]	@ (80003e4 <leds_set_state+0x28>)
+ 80003c8:	695b      	ldr	r3, [r3, #20]
+ 80003ca:	b2da      	uxtb	r2, r3
+ 80003cc:	79fb      	ldrb	r3, [r7, #7]
+ 80003ce:	021b      	lsls	r3, r3, #8
+ 80003d0:	4904      	ldr	r1, [pc, #16]	@ (80003e4 <leds_set_state+0x28>)
+ 80003d2:	4313      	orrs	r3, r2
+ 80003d4:	614b      	str	r3, [r1, #20]
 }
- 800034a:	bf00      	nop
- 800034c:	370c      	adds	r7, #12
- 800034e:	46bd      	mov	sp, r7
- 8000350:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8000354:	4770      	bx	lr
- 8000356:	bf00      	nop
- 8000358:	48001000 	.word	0x48001000
-
-0800035c <enable_clocks>:
-
-#include <stdint.h>
-#include <stm32f303xc.h>
-#include "digitalio.h"   // include the button module
-
-void enable_clocks() {
- 800035c:	b480      	push	{r7}
- 800035e:	af00      	add	r7, sp, #0
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIOEEN;
- 8000360:	4b05      	ldr	r3, [pc, #20]	@ (8000378 <enable_clocks+0x1c>)
- 8000362:	695b      	ldr	r3, [r3, #20]
- 8000364:	4a04      	ldr	r2, [pc, #16]	@ (8000378 <enable_clocks+0x1c>)
- 8000366:	f443 1328 	orr.w	r3, r3, #2752512	@ 0x2a0000
- 800036a:	6153      	str	r3, [r2, #20]
-}
- 800036c:	bf00      	nop
- 800036e:	46bd      	mov	sp, r7
- 8000370:	f85d 7b04 	ldr.w	r7, [sp], #4
- 8000374:	4770      	bx	lr
- 8000376:	bf00      	nop
- 8000378:	40021000 	.word	0x40021000
-
-0800037c <initialise_board>:
-
-void initialise_board() {
- 800037c:	b580      	push	{r7, lr}
- 800037e:	af00      	add	r7, sp, #0
-    // Initialize the LEDs using the new LED module
-    leds_init();
- 8000380:	f7ff ffb8 	bl	80002f4 <leds_init>
-}
- 8000384:	bf00      	nop
- 8000386:	bd80      	pop	{r7, pc}
-
-08000388 <chase_led>:
-
-void chase_led(void) {
- 8000388:	b580      	push	{r7, lr}
- 800038a:	af00      	add	r7, sp, #0
-    static uint8_t led_mask = 0;
-    static uint8_t direction = 1;
-
-    if (direction) {
- 800038c:	4b14      	ldr	r3, [pc, #80]	@ (80003e0 <chase_led+0x58>)
- 800038e:	781b      	ldrb	r3, [r3, #0]
- 8000390:	2b00      	cmp	r3, #0
- 8000392:	d011      	beq.n	80003b8 <chase_led+0x30>
-        led_mask = (led_mask << 1) | 1;
- 8000394:	4b13      	ldr	r3, [pc, #76]	@ (80003e4 <chase_led+0x5c>)
- 8000396:	781b      	ldrb	r3, [r3, #0]
- 8000398:	005b      	lsls	r3, r3, #1
- 800039a:	b25b      	sxtb	r3, r3
- 800039c:	f043 0301 	orr.w	r3, r3, #1
- 80003a0:	b25b      	sxtb	r3, r3
- 80003a2:	b2da      	uxtb	r2, r3
- 80003a4:	4b0f      	ldr	r3, [pc, #60]	@ (80003e4 <chase_led+0x5c>)
- 80003a6:	701a      	strb	r2, [r3, #0]
-        if (led_mask == 0xFF) {
- 80003a8:	4b0e      	ldr	r3, [pc, #56]	@ (80003e4 <chase_led+0x5c>)
- 80003aa:	781b      	ldrb	r3, [r3, #0]
- 80003ac:	2bff      	cmp	r3, #255	@ 0xff
- 80003ae:	d110      	bne.n	80003d2 <chase_led+0x4a>
-            direction = 0;
- 80003b0:	4b0b      	ldr	r3, [pc, #44]	@ (80003e0 <chase_led+0x58>)
- 80003b2:	2200      	movs	r2, #0
- 80003b4:	701a      	strb	r2, [r3, #0]
- 80003b6:	e00c      	b.n	80003d2 <chase_led+0x4a>
-        }
-    } else {
-        led_mask >>= 1;
- 80003b8:	4b0a      	ldr	r3, [pc, #40]	@ (80003e4 <chase_led+0x5c>)
- 80003ba:	781b      	ldrb	r3, [r3, #0]
- 80003bc:	085b      	lsrs	r3, r3, #1
- 80003be:	b2da      	uxtb	r2, r3
- 80003c0:	4b08      	ldr	r3, [pc, #32]	@ (80003e4 <chase_led+0x5c>)
- 80003c2:	701a      	strb	r2, [r3, #0]
-        if (led_mask == 0x00) {
- 80003c4:	4b07      	ldr	r3, [pc, #28]	@ (80003e4 <chase_led+0x5c>)
- 80003c6:	781b      	ldrb	r3, [r3, #0]
- 80003c8:	2b00      	cmp	r3, #0
- 80003ca:	d102      	bne.n	80003d2 <chase_led+0x4a>
-            direction = 1;
- 80003cc:	4b04      	ldr	r3, [pc, #16]	@ (80003e0 <chase_led+0x58>)
- 80003ce:	2201      	movs	r2, #1
- 80003d0:	701a      	strb	r2, [r3, #0]
-        }
-    }
-
-    leds_set_state(led_mask);
- 80003d2:	4b04      	ldr	r3, [pc, #16]	@ (80003e4 <chase_led+0x5c>)
- 80003d4:	781b      	ldrb	r3, [r3, #0]
- 80003d6:	4618      	mov	r0, r3
- 80003d8:	f7ff ffaa 	bl	8000330 <leds_set_state>
-}
- 80003dc:	bf00      	nop
- 80003de:	bd80      	pop	{r7, pc}
- 80003e0:	20000000 	.word	0x20000000
- 80003e4:	20000024 	.word	0x20000024
+ 80003d6:	bf00      	nop
+ 80003d8:	370c      	adds	r7, #12
+ 80003da:	46bd      	mov	sp, r7
+ 80003dc:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80003e0:	4770      	bx	lr
+ 80003e2:	bf00      	nop
+ 80003e4:	48001000 	.word	0x48001000
 
 080003e8 <main>:
 
-    // Then call the chase_led function
-    chase_led();
-}
+/*void display_led_pattern(uint8_t pattern) {
+    leds_set_state(pattern);
+}*/
 
 int main(void) {
  80003e8:	b580      	push	{r7, lr}
  80003ea:	af00      	add	r7, sp, #0
     enable_clocks();
- 80003ec:	f7ff ffb6 	bl	800035c <enable_clocks>
+ 80003ec:	f7ff ff3a 	bl	8000264 <enable_clocks>
     initialise_board();
- 80003f0:	f7ff ffc4 	bl	800037c <initialise_board>
+ 80003f0:	f7ff ff48 	bl	8000284 <initialise_board>
 
     // Register chase_led as a button press callback
     button_init(chase_led);
  80003f4:	4802      	ldr	r0, [pc, #8]	@ (8000400 <main+0x18>)
- 80003f6:	f7ff ff4b 	bl	8000290 <button_init>
+ 80003f6:	f7ff ff91 	bl	800031c <button_init>
+
 
     while (1) {
  80003fa:	bf00      	nop
  80003fc:	e7fd      	b.n	80003fa <main+0x12>
  80003fe:	bf00      	nop
- 8000400:	08000389 	.word	0x08000389
+ 8000400:	08000291 	.word	0x08000291
 
 08000404 <Reset_Handler>:
 

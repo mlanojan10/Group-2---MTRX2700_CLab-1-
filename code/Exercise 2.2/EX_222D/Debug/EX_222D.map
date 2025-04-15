@@ -70,6 +70,8 @@ Discarded input sections
  .text          0x00000000        0x0 ./Src/digitalio.o
  .data          0x00000000        0x0 ./Src/digitalio.o
  .bss           0x00000000        0x0 ./Src/digitalio.o
+ .text.test_callback
+                0x00000000       0x5c ./Src/digitalio.o
  .text.leds_get_state
                 0x00000000       0x24 ./Src/digitalio.o
  .group         0x00000000        0xc ./Src/main.o
@@ -89,8 +91,6 @@ Discarded input sections
  .text          0x00000000        0x0 ./Src/main.o
  .data          0x00000000        0x0 ./Src/main.o
  .bss           0x00000000        0x0 ./Src/main.o
- .text.test_callback
-                0x00000000       0x5c ./Src/main.o
  .debug_macro   0x00000000      0xac0 ./Src/main.o
  .debug_macro   0x00000000       0x22 ./Src/main.o
  .debug_macro   0x00000000       0x8e ./Src/main.o
@@ -592,33 +592,33 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x080001d4       0x3c ./Src/digitalio.o
  .text.__NVIC_SetPriority
                 0x08000210       0x54 ./Src/digitalio.o
- .text.configure_timer
-                0x08000264       0x54 ./Src/digitalio.o
-                0x08000264                configure_timer
- .text.TIM2_IRQHandler
-                0x080002b8       0x28 ./Src/digitalio.o
-                0x080002b8                TIM2_IRQHandler
- .text.EXTI0_IRQHandler
-                0x080002e0       0x48 ./Src/digitalio.o
-                0x080002e0                EXTI0_IRQHandler
- .text.button_init
-                0x08000328       0x68 ./Src/digitalio.o
-                0x08000328                button_init
- .text.leds_init
-                0x08000390       0x24 ./Src/digitalio.o
-                0x08000390                leds_init
- .text.leds_set_state
-                0x080003b4       0x2c ./Src/digitalio.o
-                0x080003b4                leds_set_state
  .text.enable_clocks
-                0x080003e0       0x20 ./Src/main.o
-                0x080003e0                enable_clocks
+                0x08000264       0x20 ./Src/digitalio.o
+                0x08000264                enable_clocks
  .text.initialise_board
-                0x08000400        0xc ./Src/main.o
-                0x08000400                initialise_board
+                0x08000284        0xc ./Src/digitalio.o
+                0x08000284                initialise_board
  .text.chase_led
-                0x0800040c       0x60 ./Src/main.o
-                0x0800040c                chase_led
+                0x08000290       0x60 ./Src/digitalio.o
+                0x08000290                chase_led
+ .text.configure_timer
+                0x080002f0       0x54 ./Src/digitalio.o
+                0x080002f0                configure_timer
+ .text.TIM2_IRQHandler
+                0x08000344       0x28 ./Src/digitalio.o
+                0x08000344                TIM2_IRQHandler
+ .text.EXTI0_IRQHandler
+                0x0800036c       0x48 ./Src/digitalio.o
+                0x0800036c                EXTI0_IRQHandler
+ .text.button_init
+                0x080003b4       0x68 ./Src/digitalio.o
+                0x080003b4                button_init
+ .text.leds_init
+                0x0800041c       0x24 ./Src/digitalio.o
+                0x0800041c                leds_init
+ .text.leds_set_state
+                0x08000440       0x2c ./Src/digitalio.o
+                0x08000440                leds_set_state
  .text.main     0x0800046c       0x1c ./Src/main.o
                 0x0800046c                main
  .text.Reset_Handler
@@ -793,7 +793,7 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x20000000        0x1 ./Src/digitalio.o
                 0x20000000                button_ready
  .data.direction.1
-                0x20000001        0x1 ./Src/main.o
+                0x20000001        0x1 ./Src/digitalio.o
  *(.RamFunc)
  *(.RamFunc*)
                 0x20000004                        . = ALIGN (0x4)
@@ -822,7 +822,7 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .bss.on_button_press
                 0x20000020        0x4 ./Src/digitalio.o
  .bss.led_mask.0
-                0x20000024        0x1 ./Src/main.o
+                0x20000024        0x1 ./Src/digitalio.o
  *(COMMON)
                 0x20000028                        . = ALIGN (0x4)
  *fill*         0x20000025        0x3 
@@ -868,30 +868,30 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
 LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a
 LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/thumb/v7e-m+fp/hard\libgcc.a
 
-.debug_info     0x00000000      0xe29
- .debug_info    0x00000000      0xb0f ./Src/digitalio.o
- .debug_info    0x00000b0f      0x2ea ./Src/main.o
- .debug_info    0x00000df9       0x30 ./Startup/startup_stm32f303vctx.o
+.debug_info     0x00000000      0xcac
+ .debug_info    0x00000000      0xbb0 ./Src/digitalio.o
+ .debug_info    0x00000bb0       0xcc ./Src/main.o
+ .debug_info    0x00000c7c       0x30 ./Startup/startup_stm32f303vctx.o
 
-.debug_abbrev   0x00000000      0x3b0
- .debug_abbrev  0x00000000      0x210 ./Src/digitalio.o
- .debug_abbrev  0x00000210      0x17c ./Src/main.o
- .debug_abbrev  0x0000038c       0x24 ./Startup/startup_stm32f303vctx.o
+.debug_abbrev   0x00000000      0x33a
+ .debug_abbrev  0x00000000      0x267 ./Src/digitalio.o
+ .debug_abbrev  0x00000267       0xaf ./Src/main.o
+ .debug_abbrev  0x00000316       0x24 ./Startup/startup_stm32f303vctx.o
 
 .debug_aranges  0x00000000       0xc8
  .debug_aranges
-                0x00000000       0x60 ./Src/digitalio.o
+                0x00000000       0x80 ./Src/digitalio.o
  .debug_aranges
-                0x00000060       0x40 ./Src/main.o
+                0x00000080       0x20 ./Src/main.o
  .debug_aranges
                 0x000000a0       0x28 ./Startup/startup_stm32f303vctx.o
 
 .debug_rnglists
                 0x00000000       0x87
  .debug_rnglists
-                0x00000000       0x43 ./Src/digitalio.o
+                0x00000000       0x5b ./Src/digitalio.o
  .debug_rnglists
-                0x00000043       0x2b ./Src/main.o
+                0x0000005b       0x13 ./Src/main.o
  .debug_rnglists
                 0x0000006e       0x19 ./Startup/startup_stm32f303vctx.o
 
@@ -913,16 +913,16 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x00002261    0x12a3a ./Src/digitalio.o
  .debug_macro   0x00014c9b       0xc9 ./Src/main.o
 
-.debug_line     0x00000000      0xbe4
- .debug_line    0x00000000      0x618 ./Src/digitalio.o
- .debug_line    0x00000618      0x551 ./Src/main.o
- .debug_line    0x00000b69       0x7b ./Startup/startup_stm32f303vctx.o
+.debug_line     0x00000000      0xbe6
+ .debug_line    0x00000000      0x6d1 ./Src/digitalio.o
+ .debug_line    0x000006d1      0x49a ./Src/main.o
+ .debug_line    0x00000b6b       0x7b ./Startup/startup_stm32f303vctx.o
 
 .debug_str      0x00000000    0x7276a
- .debug_str     0x00000000    0x726ce ./Src/digitalio.o
-                              0x72998 (size before relaxing)
- .debug_str     0x000726ce       0x5d ./Src/main.o
-                              0x72361 (size before relaxing)
+ .debug_str     0x00000000    0x72718 ./Src/digitalio.o
+                              0x729e2 (size before relaxing)
+ .debug_str     0x00072718       0x13 ./Src/main.o
+                              0x7227c (size before relaxing)
  .debug_str     0x0007272b       0x3f ./Startup/startup_stm32f303vctx.o
                                  0x77 (size before relaxing)
 
@@ -932,8 +932,8 @@ LOAD C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .comment       0x00000043       0x44 ./Src/main.o
 
 .debug_frame    0x00000000      0x228
- .debug_frame   0x00000000      0x154 ./Src/digitalio.o
- .debug_frame   0x00000154       0xa8 ./Src/main.o
+ .debug_frame   0x00000000      0x1d0 ./Src/digitalio.o
+ .debug_frame   0x000001d0       0x2c ./Src/main.o
  .debug_frame   0x000001fc       0x2c C:/ST/STM32CubeIDE_1.17.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-init.o)
 
 .debug_line_str

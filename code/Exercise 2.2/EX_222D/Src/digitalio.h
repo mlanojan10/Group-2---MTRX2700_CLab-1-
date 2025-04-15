@@ -3,7 +3,14 @@
 
 #include <stdint.h>
 
+//------------------------------MAIN CONTROL---------------------------------------------
+void enable_clocks();
 
+void initialise_board();
+
+void chase_led(void);
+
+void test_callback(void);
 //-------------------------BUTTON CONTROL -----------------------
 
 // Function pointer type for button press callbacks
