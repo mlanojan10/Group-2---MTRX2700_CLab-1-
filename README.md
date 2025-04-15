@@ -27,7 +27,7 @@ void enable_interrupt() {
     __enable_irq();  // Re-enable global interrupts
 }
 ```
-It also configured the Nested Vevotred Interrupt Controller to set priority to the interrupt and enable its function. 
+It also configured the Nested Vectored Interrupt Controller to set priority to the interrupt and enable its function. 
 
 When the button is pressed, the hardware triggers EXTI line 0, causing the EXTI0_IRQHandler() interrupt service routine (ISR) to execute. Inside this ISR, the program first checks if the function pointer on_button_press is non-null.
 ```
@@ -42,7 +42,7 @@ void EXTI0_IRQHandler(void)
 	EXTI->PR |= EXTI_PR_PR0;
 }
 ```
-If it is, it calls fucntion chase_led(), that controlls the state of the LEDs in a "chase" pattern, turning LED’s on and then off progressively, depending on the current LED state.  After calling the handler function, the ISR clears the interrupt allowing the system to detect the next button press.
+If it is, it calls function chase_led(), that controls the state of the LEDs in a "chase" pattern, turning LED’s on and then off progressively, depending on the current LED state.  After calling the handler function, the ISR clears the interrupt allowing the system to detect the next button press.
 
 ### Testing 
 
