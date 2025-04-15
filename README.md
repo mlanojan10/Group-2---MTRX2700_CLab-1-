@@ -1,6 +1,6 @@
 # Group-2---MTRX2700_CLab-1-
 ## Digital IO 
-#### Digital IO manages the operation of gaining an input and displaying a visual output using LED’s on the microcontroller. This functionality is controlled using interrupts within a main function to ensure responsive, asynchronous handling of user input without constantly polling the button in the main loop.. All code begins with enabling the necessary GPIO clocks and configuring the LEDs as outputs.
+Digital IO manages the operation of gaining an input and displaying a visual output using LED’s on the microcontroller. This functionality is controlled using interrupts within a main function to ensure responsive, asynchronous handling of user input without constantly polling the button in the main loop.. All code begins with enabling the necessary GPIO clocks and configuring the LEDs as outputs.
 
 ### Part A 
 The button is connected to pin PA0 and is congifgured to generate the interrupt on a rising edge - meaning the interrupt is triggered when the button is pressed. This is done through the enable_interrupt() function, which enables the required SYSCFG clock and selects PA0 as the input source by connecting PA0 to EXTI line 0, so the microcontroller knows which pin to watch: 
@@ -131,9 +131,54 @@ void EXTI0_IRQHandler(void) {
 ```
 Once running, it clears the timer flag and resets the timer, disabling further button presses until the button_ready flag is ready. 
 
-
-
 ### Testing 
+#### LED Interrupt Testing 
+Since there is an expected LED behaviour, the chase_led function was tested through visual analysis ensuring functionality through these steps:
+Press the button and observe bahaviour of LED 
+Behaviour should follow expected: 
+| Button Press | Binary Representation | Button Press | Binary Representation |
+|:------------|:---------------------|:------------|:---------------------|
+| 0            | 00000000               | 9            | 01111111               |
+| 1            | 00000001               | 10           | 00111111               |
+| 2            | 00000011               | 11           | 00011111               |
+| 3            | 00000111               | 12           | 00001111               |
+| 4            | 00001111               | 13           | 00000111               |
+| 5            | 00011111               | 14           | 00000011               |
+| 6            | 00111111               | 15           | 00000001               |
+| 7            | 01111111               | 16           | 00000000               |
+| 8            | 11111111               |               |                         |
+
+
+#### Callback Functionality Testing 
+To ensure callback functionality was working, the function was tested visually through the use of LED’s. The function test_callback(): 
+```
+void test_callback(void) {
+    // Turn on PE8
+    GPIOE->ODR |= (1 << 8);
+
+    // Delay
+    for (volatile int i = 0; i < 1000000; i++) {}
+
+    // Turn off PE8
+    GPIOE->ODR &= ~(1 << 8);
+
+    // Delay
+    for (volatile int i = 0; i < 1000000; i++) {}
+
+    // Then call chase_led
+    chase_led();
+}
+```
+To test callback functionality, this function should be set as the function pointer in main: 
+```
+button_init(test_callback);
+```
+Once the button is pressed, the callback is determined as working if the PE8 LED flashes on with a small delay then continues with the chase_led functionality. This means that th callback function has registered and is working as required. 
+
+#### Timer Functionality Testing 
+The timer was tested by observing a unchanged LED pattern when spamming the button, until 1 second from the last observed LED toggle on. Using a stopwatch to verify the time intervals was used additionally. 
+
+
 
 
 ## Serial Interface 
@@ -146,6 +191,6 @@ Once running, it clears the timer flag and resets the timer, disabling further b
 ### Testing 
 
 ## Integration 
-![Image](https://github.com/user-attachments/assets/0ebd02c1-add6-4da5-9c6d-872a68a26e80)
+![Image](https://github.com/user-attachments/assets/78ce1bd6-12cd-4ee3-96a9-8ea3d0a4fc39)
 
 ### Testing 
