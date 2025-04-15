@@ -27,6 +27,7 @@ void chase_led(void) {
     leds_set_state(led_mask);
 }
 
+
 void test_callback(void) {
     // This function is for testing purposes only and should be used to test the callback functionality.
     // For now, it just turns on PE8, waits a bit, and then turns it off.
@@ -45,8 +46,7 @@ void test_callback(void) {
     for (volatile int i = 0; i < 1000000; i++) {}  // Adjust delay time here
 
     // Then call the chase_led function
-    //chase_led();
-    //display_pattern_callback();
+    chase_led();
 }
 
 void display_pattern_callback(uint8_t *buffer) {
