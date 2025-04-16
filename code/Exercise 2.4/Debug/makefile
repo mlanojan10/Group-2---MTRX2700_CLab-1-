@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Exercise_2_3
+BUILD_ARTIFACT_NAME := Exercise 2.4
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Exercise_2_3.elf \
+Exercise\ 2.4.elf \
 
 MAP_FILES += \
-Exercise_2_3.map \
+Exercise\ 2.4.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Exercise_2_3.list \
+Exercise\ 2.4.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Exercise_2_3.elf secondary-outputs
+main-build: Exercise\ 2.4.elf secondary-outputs
 
 # Tool invocations
-Exercise_2_3.elf Exercise_2_3.map: $(OBJS) $(USER_OBJS) /Users/johnny/Desktop/Group-2---MTRX2700_CLab-1-/Exercise_2_3/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Exercise_2_3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/johnny/Desktop/Group-2---MTRX2700_CLab-1-/Exercise_2_3/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Exercise_2_3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Exercise\ 2.4.elf Exercise\ 2.4.map: $(OBJS) $(USER_OBJS) /Users/johnny/Desktop/Group-2---MTRX2700_CLab-1-/Exercise\ 2.4/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Exercise 2.4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/johnny/Desktop/Group-2---MTRX2700_CLab-1-/Exercise 2.4/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Exercise 2.4.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Exercise_2_3.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Exercise_2_3.list"
+Exercise\ 2.4.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Exercise 2.4.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Exercise_2_3.elf Exercise_2_3.list Exercise_2_3.map default.size.stdout
+	-$(RM) Exercise\ 2.4.elf Exercise\ 2.4.list Exercise\ 2.4.map Exercise\\ 2.4.elf default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

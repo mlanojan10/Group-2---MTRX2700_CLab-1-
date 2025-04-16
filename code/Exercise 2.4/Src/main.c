@@ -24,21 +24,21 @@
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-//  program entrance
+//  Program entrance
 int main(void)
 {
-	// board initialisation
+	// Board initialisation
 	enable_clocks();
 	initialise_board();
 
-	// initialise timer with delay time and callback function
-	init_timer_module(TIM2, 1000, change_pattern);
-
+	// Initialise timer with delay time and callback function
+	init_timer_module(TIM2, change_pattern);
 	enable_timer2_interrupt();
+	//reset_timer(TIM2, 1000);
 
-	// uncomment to test function
-	//reset_timer(TIM2, 500);
-	//one_shot(TIM2, 2000);
+
+	// Uncomment to test function
+	one_shot(TIM2, 2000);
 
 	/* Loop forever */
 	for(;;) {}

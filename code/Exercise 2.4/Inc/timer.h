@@ -10,7 +10,7 @@ void initialise_board();
 
 void trigger_prescaler(TIM_TypeDef *TIM);
 
-void init_timer_module(TIM_TypeDef *TIM, uint32_t interval, void (*timer_callback)());
+void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)());
 
 void change_pattern();
 
