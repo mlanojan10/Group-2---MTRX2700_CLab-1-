@@ -223,3 +223,22 @@ void display_pattern_callback(uint8_t *buffer) {
 As the user input is given in ascii format, this function converts this to a binary 8 bit string and then sets the led pattern by the led_set_state() function. The function also ensures that only 8 bits are registered as the pattern, and further limits any issues of receiving incorrect input from the user.
 
 ### Testing 
+
+| Module     | User Input                  | Expected Output                                                   |
+|:------------|:----------------------------|:------------------------------------------------------------------|
+| **Digital IO** |||
+|             | `led 11111111`              | All LEDs turn on                                                  |
+|             | `led 00000000`              | All LEDs remain off                                               |
+|             | `led 10101010`              | Alternating pattern on LEDs                                       |
+|             | `led 01101010`              | Corresponding LED pattern should appear                           |
+|             | `led 111000111000101`       | Only the newest 8 bits should display. In this case: `11100011`   |
+|             | `led 11122111`              | All LEDs remain off (invalid input ignored)                       |
+| **Serial** |||
+|             | `serial hello`              | `String: hello`                                                   |
+|             | `serial MTRX2700 Project 2` | `String: MTRX2700 Project 2`                                      |
+| **Timer** |||
+|             | `timer 1000`                | Timer should have a period of 1 second for every flash on/off     |
+|             | `timer 3000`                | Timer should have a period of 3 seconds for every flash on/off    |
+| **One Shot** |||
+|             | `oneshot 1000`              | Pattern should stay on for 1 second, then turn off forever        |
+|             | `oneshot 3000`              | Pattern should stay on for 3 seconds, then turn off forever       |
