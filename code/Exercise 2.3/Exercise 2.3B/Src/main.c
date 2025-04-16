@@ -16,7 +16,7 @@ int __io_getchar(void) {
 
 void OnLineReceived(char *string, uint32_t length) {
     printf("> You typed: %s\r\n", string);
-    printf("> Echo: %s\r\n\r\n", string);
+    printf("> String: %s\r\n\r\n", string);
 }
 
 int main(void) {
