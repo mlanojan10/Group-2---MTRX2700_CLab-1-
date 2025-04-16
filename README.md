@@ -201,11 +201,11 @@ The timer was tested by observing a unchanged LED pattern when spamming the butt
 ## Serial Interface 
 The Serial Interface module manages communication between the microcontroller and external devices using UART. It receives and transmits data asynchronously through the use of interrupts, allowing the system to handle serial communication efficiently without polling. The module buffers incoming characters until a terminating character is received, at which point a callback function is triggered to process the complete message. Double buffering is implemented to allow simultaneous receiving and processing of data, ensuring smooth and reliable operation even under continuous data flow.
 ### Part A 
-Serial interface enables communication between a microcontroller and an external terminal using UART. In this exercise, a blocking input method is implemented to capture and echo user-typed strings. The system waits for each character from the USART, stores them in a buffer, and ends the read process when a newline or carriage return is detected. It provides a foundational mechanism for interacting with UART using polling.
+This part implements a blocking input method for capturing user input via UART. Each character is polled and stored until Enter is pressed, after which the entire string is echoed.
 
 #### Usage
 
-When the program runs, it prompts the user to type a string via the serial console. Upon pressing Enter, the system echoes back the received input and waits for the next line.
+When the program runs, the user types a string into the serial terminal. Pressing Enter triggers the system to echo the received line and await the next input.
 
 #### Valid input
 
@@ -222,17 +222,10 @@ Any sequence of characters terminated by `\r` (carriage return) or `\n` (newline
 
 #### Testing
 
-Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
-
-#### Notes
-
-- Input is handled in a blocking manner, meaning the main loop halts until input is received.
-- Input buffer size must be considered to avoid overflow.
-- No interrupt or background handling is used—entirely synchronous.
-- Completion callback is initialized as `NULL` and not used in this basic version.
+Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., CuteCom or PuTTY). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
 
 ### Part B
-This part enhances the serial interface by introducing a **receive callback mechanism**, allowing the system to automatically process complete input lines without manually checking after every call. The callback is invoked once a newline or carriage return character ends the input, promoting a more event-driven style of serial interaction.
+This part Enhances the system with a receive callback mechanism, enabling the program to respond automatically once a full line is received, promoting an event-driven structure.
 
 #### Usage
 
@@ -248,25 +241,68 @@ Any string of characters terminated by `\r` (carriage return) or `\n` (newline).
 
 #### Functions and modularity
 
-- `SerialInitialise(...)`: Initializes USART and GPIO, with a placeholder for a TX completion function.
+- `All Part A functions.`
 - `SerialSetReceiveCallback(...)`: Registers a function to be called when a full line is received.
-- `SerialOutputChar(...)`: Sends a character via USART.
-- `SerialOutputString(...)`: Sends a null-terminated string.
-- `SerialGetChar(...)`: Blocking read of a single character.
-- `SerialInputLine(...)`: Reads characters until Enter is pressed, stores in a buffer, then calls the registered callback.
-- `__io_putchar`, `__io_getchar`: Used for redirecting standard I/O to USART.
+- `OnLineReceived(char *string, uint32_t length)`: Callback function
 
-#### Callback function
+#### Testing
 
-```
-void OnLineReceived(char *string, uint32_t length);
-```
+Testing is performed similar to Part A.
+
 ### Part C
+
+This part Implements interrupt-driven reception, allowing background input handling. When a line ends with `\n`, a callback is triggered to echo the input. This removes the need for polling.
+
+#### Usage
+
+Users type lines into the terminal. After Enter, input is echoed twice via the callback. Input handling occurs via interrupts.
+
+#### Valid input
+
+Any character sequence terminated by `\r` or `\n`. Buffer size is 64 characters.
+
+#### Functions and modularity
+
+- `Has all functions from previous parts.`
+- `USART1_EXTI25_IRQHandler(...)`:  
+  Interrupt handler that reads incoming characters and processes them, calling the callback when a complete line is received.
 
 ### Part D
 
-### Testing
-Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY or CuteCom). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
+This part enhances the serial communication system by enabling **non-blocking transmission**. Instead of printing strings character by character using blocking calls (like in `printf`), this version offloads the job to a transmit interrupt handler. The `SerialStartTransmission()` function initiates the process, and transmission continues in the background via interrupts. This makes the system more responsive and efficient, allowing background work while output is still occurring.
+
+#### Usage
+
+On start, a prompt is displayed using non-blocking transmission:
+```
+USART1 is ready. Type a line and press Enter:
+```
+User input is echoed back using the interrupt-based output handler.
+
+#### Valid input
+
+- Any string of characters terminated by a newline character (`\n`) will be accepted.
+- Carriage return characters (`\r`) are ignored and do not terminate the input.
+- The maximum accepted input length is 63 characters (due to the 64-byte input buffer including null terminator).
+- Output strings are also limited by the 80-character `response` buffer in `OnLineReceived`.
+- Input longer than the buffer length will be truncated.
+
+#### Functions and modularity
+
+- `All previous functions.`
+
+- `SerialInitialise(...)`: Extended to support optional TX completion function.
+
+- `SerialStartTransmission(const char *str)`  
+  Starts a non-blocking transmission of a string using interrupts. The string is stored globally and transmitted one character at a time in the interrupt service routine.
+
+- `USART1_EXTI25_IRQHandler(void)`  
+  Combined interrupt handler:
+  - Handles reception of characters: builds the input string, echoes characters, and triggers the receive callback when a newline is detected.
+  - Handles transmission of characters: continues sending the current buffer until completion, then disables the transmit interrupt.
+
+#### Testing
+Connect using a terminal emulator. The program echoes lines typed by the user, and prompts are printed using background transmission.
 
 ## Timer Interface
 The timer module enables the use of periodic and one-shot events using hardware timers. Timer 2 (TIM2) is primarily used in this module, however other timers can be enabled as well with minor changes. This code is designed to trigger user-defined callback functions after configurable delays while allowing other processes to be run simultaneously without having to use polling which takes away program time.
