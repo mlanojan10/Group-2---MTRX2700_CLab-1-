@@ -268,7 +268,7 @@ void OnLineReceived(char *string, uint32_t length);
 ### Testing
 Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY or CuteCom). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
 
-### Timer Interface
+## Timer Interface
 The timer module enables the use of periodic and one-shot events using hardware timers. Timer 2 (TIM2) is primarily used in this module, however other timers can be enabled as well with minor changes. This code is designed to trigger user-defined callback functions after configurable delays while allowing other processes to be run simultaneously without having to use polling which takes away program time.
 ### Timer
 The init_timer_module() function initialises a hardware timer with 1ms ticks by setting the prescaler value to 7999 which converts the timer clock to 8Mhz / (7999+1) = 1kHz and stores a callback function to a function pointer to be called whenever the timer reaches a desired count. This is achieved by configuring auto-reload register (ARR) to overflow after a user-defined value. It has two arguments, the specific timer to be intiialised (e.g. TIM2), and the callback function (e.g. blink_all_leds).
