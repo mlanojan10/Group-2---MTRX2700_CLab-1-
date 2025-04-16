@@ -11,7 +11,7 @@ int __io_putchar(int ch) {
 
 void OnLineReceived(char *string, uint32_t length) {
     static char response[80];
-    snprintf(response, sizeof(response), "> You typed: %s\r\n> Echo: %s\r\n\r\n", string, string);
+    snprintf(response, sizeof(response), "> You typed: %s\r\n> String: %s\r\n\r\n", string, string);
     SerialStartTransmission(response);
 }
 
