@@ -223,6 +223,84 @@ void display_pattern_callback(uint8_t *buffer) {
 As the user input is given in ascii format, this function converts this to a binary 8 bit string and then sets the led pattern by the led_set_state() function. The function also ensures that only 8 bits are registered as the pattern, and further limits any issues of receiving incorrect input from the user.
 
 ### Testing 
+<table>
+  <tr>
+    <th>Module</th>
+    <th>User Input</th>
+    <th>Expected</th>
+  </tr>
+  
+  <!-- Digital IO -->
+  <tr>
+    <td rowspan="6"><b>Digital IO</b></td>
+    <td>led 11111111</td>
+    <td>All LEDs turn on</td>
+  </tr>
+  <tr>
+    <td>led 00000000</td>
+    <td>All LEDs remain off</td>
+  </tr>
+  <tr>
+    <td>led 10101010</td>
+    <td>Alternating pattern on LEDs</td>
+  </tr>
+  <tr>
+    <td>led 01101010</td>
+    <td>Corresponding LED pattern should appear</td>
+  </tr>
+  <tr>
+    <td>led 111000111000101</td>
+    <td>Only the newest 8 bits should display the pattern. In this case: 11100011</td>
+  </tr>
+  <tr>
+    <td>led 11122111</td>
+    <td>All LEDs remain off</td>
+  </tr>
+
+  <!-- Serial -->
+  <tr>
+    <td rowspan="2"><b>Serial</b></td>
+    <td>serial hello</td>
+    <td>“String: hello” should be returned</td>
+  </tr>
+  <tr>
+    <td>serial MTRX2700 Project 2</td>
+    <td>“String: MTRX2700 Project 2” should be returned</td>
+  </tr>
+
+  <!-- Timer -->
+  <tr>
+    <td rowspan="2"><b>Timer</b></td>
+    <td>timer 1000</td>
+    <td>Timer should have a period of 1 second for every flash on and off of pattern</td>
+  </tr>
+  <tr>
+    <td>timer 3000</td>
+    <td>Timer should have a period of 3 seconds for every flash on and off of pattern</td>
+  </tr>
+
+  <!-- One Shot -->
+  <tr>
+    <td rowspan="2"><b>One Shot</b></td>
+    <td>oneshot 1000</td>
+    <td>Pattern should stay on for 1 second then turn off forever</td>
+  </tr>
+  <tr>
+    <td>oneshot 3000</td>
+    <td>Pattern should stay on for 3 seconds then turn off forever</td>
+  </tr>
+
+  <!-- Other Input -->
+  <tr>
+    <td rowspan="2"><b>Other Input</b></td>
+    <td>hello 1000</td>
+    <td>“Unknown Command”</td>
+  </tr>
+  <tr>
+    <td>timer1000</td>
+    <td>“Invalid input format”</td>
+  </tr>
+</table>
 
 | Module     | User Input                  | Expected Output                                                   |
 |:------------|:----------------------------|:------------------------------------------------------------------|
