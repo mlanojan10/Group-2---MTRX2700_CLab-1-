@@ -30,7 +30,7 @@ int main(void) {
     while (1) {
 		printf("> ");  // Print prompt
 		SerialInputLine(input_buffer, sizeof(input_buffer), &USART1_PORT);  // Read an entire line of input from USART1
-		printf("Echo: %s\r\n\r\n", input_buffer);  // Echo back with extra newline
+		printf("String: %s\r\n\r\n", input_buffer);  // Echo back with extra newline
     }
 
 }
