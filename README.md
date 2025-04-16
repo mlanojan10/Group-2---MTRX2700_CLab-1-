@@ -1,4 +1,21 @@
 # Group-2---MTRX2700_CLab-1-
+
+## Details about the project
+### Group Member Roles & Responsibilities:
+
+- **Sharon Britto**  
+  Worked on Exercise 1 and Exercise 4. Responsible for writing code and user instructions.
+
+- **Luc Do**  
+  Worked on Exercise 2 and Exercise 4. Wrote code and user instructions for parts **b** and **d**.
+
+- **Melvin Lanojan**  
+  Worked on Exercise 2 and Exercise 4. Wrote code and user instructions for parts **a** and **c**. Also responsible for recording meeting minutes.
+
+- **Johnny Wang**  
+  Worked on Exercise 3 and Exercise 4. Responsible for writing code and user instructions.
+
+
 ## Digital IO 
 Digital IO manages the operation of gaining an input and displaying a visual output using LED’s on the microcontroller. This functionality is controlled using interrupts within a main function to ensure responsive, asynchronous handling of user input without constantly polling the button in the main loop.. All code begins with enabling the necessary GPIO clocks and configuring the LEDs as outputs.
 
@@ -182,6 +199,13 @@ The timer was tested by observing a unchanged LED pattern when spamming the butt
 
 
 ## Serial Interface 
+### Part A 
+
+### Part B
+
+### Part C
+
+### Part D
 
 ### Testing 
 
