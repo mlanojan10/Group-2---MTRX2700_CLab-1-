@@ -191,6 +191,35 @@ The timer was tested by observing a unchanged LED pattern when spamming the butt
 ### Testing 
 
 ## Integration 
+The integration tasks encapsulated all 3 modules together to provide a working user interface that can control each function and certain parameters through input into the laptop. All modules have stayed the same as what was explained above, however, there have been some slight changes to ensure proper functionality of the task.
 ![Image](https://github.com/user-attachments/assets/78ce1bd6-12cd-4ee3-96a9-8ea3d0a4fc39)
+This flowchart depicts the integration task and key compoennts in its functionality.  
+
+The main function handles (I am not bothered writing this, someone please do it): 
+- Talk about the if - else statement and how it checks if the input is valid 
+- How the buffer is split into commands and instructions and passed as an argument -double buffers? 
+- How the struct within the main function handles overriding the mode so we get the proper function when a new user request is sent. 
+
+
+#### Digital IO 
+The integration task requires a certain user input bitmask to be displayed on the microcontroller LEDs, which is different from the previous parts needed in the digital IO interface. There is no longer a need for a button to control this and hence the function display_pattern_callback() was added to the module: 
+```
+void display_pattern_callback(uint8_t *buffer) {
+	// Convert ASCII binary string (e.g., "11011110") to uint8_t pattern
+	uint8_t pattern = 0;
+
+	for (int i = 0; i < 8; i++) {
+		if (buffer[i] == '1') {
+			pattern |= (1 << (7 - i));  // MSB first
+		} else if (buffer[i] != '0') {
+			// Invalid character found — stop and do not update LEDs
+			return;
+		}
+	}
+
+	leds_set_state(pattern);
+}
+```
+As the user input is given in ascii format, this function converts this to a binary 8 bit string and then sets the led pattern by the led_set_state() function. The function also ensures that only 8 bits are registered as the pattern, and further limits any issues of receiving incorrect input from the user.
 
 ### Testing 
