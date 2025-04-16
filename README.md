@@ -199,15 +199,74 @@ The timer was tested by observing a unchanged LED pattern when spamming the butt
 
 
 ## Serial Interface 
+The Serial Interface module manages communication between the microcontroller and external devices using UART. It receives and transmits data asynchronously through the use of interrupts, allowing the system to handle serial communication efficiently without polling. The module buffers incoming characters until a terminating character is received, at which point a callback function is triggered to process the complete message. Double buffering is implemented to allow simultaneous receiving and processing of data, ensuring smooth and reliable operation even under continuous data flow.
 ### Part A 
+Serial interface enables communication between a microcontroller and an external terminal using UART. In this exercise, a blocking input method is implemented to capture and echo user-typed strings. The system waits for each character from the USART, stores them in a buffer, and ends the read process when a newline or carriage return is detected. It provides a foundational mechanism for interacting with UART using polling.
+
+#### Usage
+
+When the program runs, it prompts the user to type a string via the serial console. Upon pressing Enter, the system echoes back the received input and waits for the next line.
+
+#### Valid input
+
+Any sequence of characters terminated by `\r` (carriage return) or `\n` (newline). The buffer is limited to 63 characters plus null terminator.
+
+#### Functions and modularity
+
+- `SerialInitialise(...)`: Configures the GPIO and USART for communication.
+- `SerialOutputChar(...)`: Sends a character over USART.
+- `SerialOutputString(...)`: Sends a string over USART.
+- `SerialGetChar(...)`: Receives a single character (blocking).
+- `SerialInputLine(...)`: Receives and stores characters in a buffer until Enter is pressed.
+- `__io_putchar`, `__io_getchar`: Redirects `printf` and `getchar` to work with USART.
+
+#### Testing
+
+Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
+
+#### Notes
+
+- Input is handled in a blocking manner, meaning the main loop halts until input is received.
+- Input buffer size must be considered to avoid overflow.
+- No interrupt or background handling is used—entirely synchronous.
+- Completion callback is initialized as `NULL` and not used in this basic version.
 
 ### Part B
+This part enhances the serial interface by introducing a **receive callback mechanism**, allowing the system to automatically process complete input lines without manually checking after every call. The callback is invoked once a newline or carriage return character ends the input, promoting a more event-driven style of serial interaction.
+
+#### Usage
+
+When the program runs, it waits for a user input line and then triggers a callback that displays two lines:
+- One echoing what the user typed
+- Another reprinting the same string for clarity
+
+The user is then prompted again to enter the next input.
+
+#### Valid input
+
+Any string of characters terminated by `\r` (carriage return) or `\n` (newline). Input is stored in a buffer of size 64 (63 characters + null terminator).
+
+#### Functions and modularity
+
+- `SerialInitialise(...)`: Initializes USART and GPIO, with a placeholder for a TX completion function.
+- `SerialSetReceiveCallback(...)`: Registers a function to be called when a full line is received.
+- `SerialOutputChar(...)`: Sends a character via USART.
+- `SerialOutputString(...)`: Sends a null-terminated string.
+- `SerialGetChar(...)`: Blocking read of a single character.
+- `SerialInputLine(...)`: Reads characters until Enter is pressed, stores in a buffer, then calls the registered callback.
+- `__io_putchar`, `__io_getchar`: Used for redirecting standard I/O to USART.
+
+#### Callback function
+
+```c
+void OnLineReceived(char *string, uint32_t length);
 
 ### Part C
 
 ### Part D
 
-### Testing 
+### Testing
+Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY or CuteCom). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
 
 ## Timer Interface
 The timer module enables the use of periodic and one-shot events using hardware timers. Timer 2 (TIM2) is primarily used in this module, however other timers can be enabled as well with minor changes. This code is designed to trigger user-defined callback functions after configurable delays while allowing other processes to be run simultaneously without having to use polling which takes away program time.
