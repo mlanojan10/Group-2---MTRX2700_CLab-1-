@@ -210,9 +210,134 @@ The timer was tested by observing a unchanged LED pattern when spamming the butt
 ### Testing 
 
 ## Timer Interface
-### Timer 
-### One Shot 
-### Testing 
+The timer module enables the use of periodic and one-shot events using hardware timers. Timer 2 (TIM2) is primarily used in this module, however other timers can be enabled as well with minor changes. This code is designed to trigger user-defined callback functions after configurable delays while allowing other processes to be run simultaneously without having to use polling which takes away program time.
+### Timer
+The init_timer_module() function initialises a hardware timer with 1ms ticks by setting the prescaler value to 7999 which converts the timer clock to 8Mhz / (7999+1) = 1kHz and stores a callback function to a function pointer to be called whenever the timer reaches a desired count. This is achieved by configuring auto-reload register (ARR) to overflow after a user-defined value. It has two arguments, the specific timer to be intiialised (e.g. TIM2), and the callback function (e.g. blink_all_leds).
+```
+// Store a pointer to the function that is called when a timer interrupt occurs
+void (*on_timer_interrupt)() = 0x00;
+
+// Initialise timer with 1ms ticks to trigger a callback function regularly
+// Input: desired timer number to initialise; callback function
+void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)());
+```
+The current timer period can be accessed and changed by using the get_timer_period() and set_timer_period() functions which takes a specific timer number (e.g. TIM2) and either returns that timer's period in ms or set a user-defined period in ms for that timer. Timers' count can also be reset with a new period by the reset_timer() function which takes as input the timer number (e.g. TIM2) and the new period in ms (e.g. 1000).
+```
+// Function to reset a specific timer's count with a new period in ms
+// Assuming timers are configured to 1kHz so each count is ms
+void reset_timer(TIM_TypeDef *TIM, uint32_t new_period);
+```
+To execute the user-defined callback function stored in the function pointer on_timer_interrupt during initialisation, hardware interrupt is enabled by calling enable_timer2_interrupt() on initialisation:
+```
+// Enable hardware interrupt for timer 2
+void enable_timer2_interrupt() {
+	// Disable the interrupts while messing around with the settings
+	// Otherwise can lead to strange behaviour
+	__disable_irq();
+
+	// Enable update interrupt (UIE)
+	TIM2->DIER |= TIM_DIER_UIE;
+
+	// Tell the NVIC module that TIM2 interrupts should be handled
+	NVIC_SetPriority(TIM2_IRQn, 1);  // Set Priority
+	NVIC_EnableIRQ(TIM2_IRQn);
+
+	// Re-enable all interrupts (now that we are finished)
+	__enable_irq();
+}
+```
+It enables the update interrupt for TIM2 which is triggered whenever the timer overflows the ARR value (i.e. user-defined interval in ms) which then branches to execute the Interrupt Service Routine (ISR) for that timer. To enable hardware interrupt for other timers simply change "TIM2" in code above to the desired timer number. The function pointer on_timer_interrupt stores the address of the user callback, which is then called during the timer interrupt service routine (ISR):
+```
+// Interrupt Service Routine
+void TIM2_IRQHandler(void) {
+    // Check if the TIM2 interrupt flag is set
+    if (TIM2->SR & TIM_SR_UIF) {
+	// Run the callback function (make sure it is not null first)
+        if (on_timer_interrupt != 0x00) {
+		on_timer_interrupt();
+	}
+	...
+        // Clear the interrupt flag (write 1 to the UIF bit to reset it)
+        TIM2->SR &= ~TIM_SR_UIF;
+    }
+}
+```
+The handler first checks if the interrupt event is an update interrupt event as hardware interrupts can be triggered by any global timer event. If true, meaning the interrupt stems from the user-defined interval having elapsed, then the callback function is executed and the interrupt flag is cleared. By design the ISR will be triggered at regular intervals indefinitely.
+
+### One Shot
+The one_shot() function configures a specific timer in one-pulse mode (OPM) to execute a callback only once after a specified delay:
+```
+// Hardware interrupt enable for converting a specific timer's operation to one-pulse mode
+// Input specific timer to be used and delay desired in ms
+void one_shot(TIM_TypeDef *TIM, uint32_t delay) {
+	// Sets value for capture/compare event
+	TIM->CCR1 = delay;
+	// Enable one-pulse mode
+	TIM->CR1 |= TIM_CR1_OPM;
+	// Enable capture/compare interrupt
+	TIM->DIER |= TIM_DIER_CC1IE;
+	reset_timer(TIM, delay);
+}
+```
+The OPM function uses capture/compare (CC) event and CC interrupt 
+
+
+HAVE NOT FINISHED THIS PART
+
+```
+...
+// If timer is in one-pulse mode reset timer to default mode
+if (TIM2->SR & TIM_SR_CC1IF) {
+	// Disable capture/compare flag
+	TIM2->SR &= ~TIM_SR_CC1IF;
+	// Disable the Capture/Compare 1 interrupt
+	TIM2->DIER &= ~TIM_DIER_CC1IE;
+}
+...
+```
+### Testing
+The two main functions of the timer module can be tested either through changes in functions init_timer_module(), reset_timer() or one_shot() where onboard LEDs will provide a visual aid for proper operations. It is assumed all inputs will be logical and any callback function defined. Delay time should not exceed 2^32-1 or be negative.
+#### Callback function triggered at reguar intervals
+Input:
+```
+...
+init_timer_module(TIM2, blink_all_leds);
+reset_timer(TIM2, 1000);
+...
+```
+Output:
+All LEDs will be on 1000ms/1s and off 1000ms/1s indefinitely.
+
+Input:
+```
+...
+init_timer_module(TIM2, blink_alternate_leds);
+reset_timer(TIM2, 50);
+...
+```
+Output:
+Every second LED will be on 50ms/0.05s and off 50ms/0.05s indefinitely.
+
+#### One-shot mode
+Input:
+```
+...
+init_timer_module(TIM2, blink_all_leds);
+one-shot(TIM2, 1000);
+...
+```
+Output:
+All LEDs will be turned on and after a 1000ms/1s delay all will turn off and stay off indefintely.
+
+Input:
+```
+...
+init_timer_module(TIM2, blink_alternate_leds);
+one-shot(TIM2, 50);
+...
+```
+Output:
+Every second LED will be turned on and after a 50ms/0.05s delay all will turn off and stay off indefintely.
 
 ## Integration 
 The integration tasks encapsulated all 3 modules together to provide a working user interface that can control each function and certain parameters through input into the laptop. All modules have stayed the same as what was explained above, however, there have been some slight changes to ensure proper functionality of the task.
