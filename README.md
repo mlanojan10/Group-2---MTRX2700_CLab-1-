@@ -247,7 +247,7 @@ Any string of characters terminated by `\r` (carriage return) or `\n` (newline).
 
 #### Testing
 
-Testing is performed similar to Part A.
+Testing is performed similar to part A.
 
 ### Part C
 
@@ -266,6 +266,10 @@ Any character sequence terminated by `\r` or `\n`. Buffer size is 64 characters.
 - `Has all functions from previous parts.`
 - `USART1_EXTI25_IRQHandler(...)`:  
   Interrupt handler that reads incoming characters and processes them, calling the callback when a complete line is received.
+
+#### Testing
+
+Testing is performed similar to parts A and B.
 
 ### Part D
 
