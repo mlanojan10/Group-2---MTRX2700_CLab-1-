@@ -298,22 +298,22 @@ Testing of the Integration method was done by comparing the observed results to 
   <tr>
     <td rowspan="2"><b>Timer</b></td>
     <td>timer 1000</td>
-    <td>Timer should have a period of 1 second for every flash on and off of pattern</td>
+    <td>All LEDs should be off and then blink with an interval of 1 second</td>
   </tr>
   <tr>
     <td>timer 3000</td>
-    <td>Timer should have a period of 3 seconds for every flash on and off of pattern</td>
+    <td>All LEDs should be off and then blink with an interval of 3 seconds</td>
   </tr>
 
   <!-- One Shot -->
   <tr>
     <td rowspan="2"><b>One Shot</b></td>
     <td>oneshot 1000</td>
-    <td>Pattern should stay on for 1 second then turn off forever</td>
+    <td>All LEDs should be off and then turn and stay on after a delay of 1 second</td>
   </tr>
   <tr>
     <td>oneshot 3000</td>
-    <td>Pattern should stay on for 3 seconds then turn off forever</td>
+    <td>All LEDs should be off and then turn on and stay on after a delay of 3 second</td>
   </tr>
 
   <!-- Other Input -->
