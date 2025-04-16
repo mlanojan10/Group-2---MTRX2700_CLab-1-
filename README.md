@@ -258,9 +258,9 @@ Any string of characters terminated by `\r` (carriage return) or `\n` (newline).
 
 #### Callback function
 
-```c
+```
 void OnLineReceived(char *string, uint32_t length);
-
+```
 ### Part C
 
 ### Part D
@@ -268,7 +268,7 @@ void OnLineReceived(char *string, uint32_t length);
 ### Testing
 Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., PuTTY or CuteCom). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
 
-## Timer Interface
+### Timer Interface
 The timer module enables the use of periodic and one-shot events using hardware timers. Timer 2 (TIM2) is primarily used in this module, however other timers can be enabled as well with minor changes. This code is designed to trigger user-defined callback functions after configurable delays while allowing other processes to be run simultaneously without having to use polling which takes away program time.
 ### Timer
 The init_timer_module() function initialises a hardware timer with 1ms ticks by setting the prescaler value to 7999 which converts the timer clock to 8Mhz / (7999+1) = 1kHz and stores a callback function to a function pointer to be called whenever the timer reaches a desired count. This is achieved by configuring auto-reload register (ARR) to overflow after a user-defined value. It has two arguments, the specific timer to be intiialised (e.g. TIM2), and the callback function (e.g. blink_all_leds).
@@ -343,7 +343,7 @@ The OPM function uses capture/compare (CC) event and CC interrupt
 
 HAVE NOT FINISHED THIS PART
 
-```
+
 ...
 // If timer is in one-pulse mode reset timer to default mode
 if (TIM2->SR & TIM_SR_CC1IF) {
@@ -353,27 +353,27 @@ if (TIM2->SR & TIM_SR_CC1IF) {
 	TIM2->DIER &= ~TIM_DIER_CC1IE;
 }
 ...
-```
+
 ### Testing
 The two main functions of the timer module can be tested either through changes in functions init_timer_module(), reset_timer() or one_shot() where onboard LEDs will provide a visual aid for proper operations. It is assumed all inputs will be logical and any callback function defined. Delay time should not exceed 2^32-1 or be negative.
 #### Callback function triggered at reguar intervals
 Input:
-```
+
 ...
 init_timer_module(TIM2, blink_all_leds);
 reset_timer(TIM2, 1000);
 ...
-```
+
 Output:
 All LEDs will be on 1000ms/1s and off 1000ms/1s indefinitely.
 
 Input:
-```
+
 ...
 init_timer_module(TIM2, blink_alternate_leds);
 reset_timer(TIM2, 50);
 ...
-```
+
 Output:
 Every second LED will be on 50ms/0.05s and off 50ms/0.05s indefinitely.
 
@@ -389,12 +389,12 @@ Output:
 All LEDs will be turned on and after a 1000ms/1s delay all will turn off and stay off indefintely.
 
 Input:
-```
+
 ...
 init_timer_module(TIM2, blink_alternate_leds);
 one-shot(TIM2, 50);
 ...
-```
+
 Output:
 Every second LED will be turned on and after a 50ms/0.05s delay all will turn off and stay off indefintely.
 
