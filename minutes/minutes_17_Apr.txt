@@ -1,0 +1,16 @@
+17/04/25 11am-2pm
+
+Attendees: Sharon Britto, Luc Do, Melvin Lanojan, Johnny Wang
+
+Topics Covered: 
+  Cleaning up code comments.
+  Finishing integration task for ReadMe.md file.
+
+Key Discussions: 
+  How to demonstrate our code.
+
+Decisions made:
+  Finalise ReadMe.md file, code comments, and code.
+
+Actionables:
+  Have code fully functional and formatted for lab demo.
