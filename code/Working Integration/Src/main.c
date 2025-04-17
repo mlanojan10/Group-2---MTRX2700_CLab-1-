@@ -78,14 +78,14 @@ void OnLineReceived(char *input, uint32_t len) {
     else if (strcmp(command, "timer") == 0) {   // If command is "timer" complete TIMER Module
         uint32_t ms = atoi(argument);           // Convert argument to integer milliseconds
         current_mode = MODE_TIMER;
-        reset_timer(ms);                  // Start periodic timer with that interval
+        reset_timer(TIM2, ms);                  // Start periodic timer with that interval
         SerialStartTransmission("Periodic timer started.\r\n> ");
     }
 
     // TIMER Module (Oneshot)
     else if (strcmp(command, "oneshot") == 0) {
         uint32_t ms = atoi(argument);         // Convert argument to integer milliseconds
-        one_shot(ms);             // Trigger one-shot timer event
+        one_shot(TIM2, ms);             // Trigger one-shot timer event
         current_mode = MODE_ONESHOT;
         SerialStartTransmission("One-shot timer triggered.\r\n> ");
     }
@@ -106,7 +106,7 @@ int main(void) {
     SerialInitialise(BAUD_115200, &USART1_PORT, NULL);
     SerialSetReceiveCallback(&USART1_PORT, OnLineReceived);
 
-
+    init_timer_module(TIM2, blink_all_leds);
     enable_timer2_interrupt();             // Enable TIM2 IRQs
     pattern_callback_init(display_pattern_callback); // Register LED pattern handler
 

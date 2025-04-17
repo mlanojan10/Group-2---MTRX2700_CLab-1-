@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (13.3.rel1)
+# Toolchain: GNU Tools for STM32 (12.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -33,34 +33,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Exercise Integration
+BUILD_ARTIFACT_NAME := Exercise_4_Final
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Exercise\ Integration.elf \
+Exercise_4_Final.elf \
 
 MAP_FILES += \
-Exercise\ Integration.map \
+Exercise_4_Final.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Exercise\ Integration.list \
+Exercise_4_Final.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Exercise\ Integration.elf secondary-outputs
+main-build: Exercise_4_Final.elf secondary-outputs
 
 # Tool invocations
-Exercise\ Integration.elf Exercise\ Integration.map: $(OBJS) $(USER_OBJS) /Users/lucdo/Desktop/Uni/Year\ 2/Sem\ 1/MTRX2700/Assignment\ 2/Workspace/Exercise\ Integration/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Exercise Integration.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/lucdo/Desktop/Uni/Year 2/Sem 1/MTRX2700/Assignment 2/Workspace/Exercise Integration/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Exercise Integration.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Exercise_4_Final.elf Exercise_4_Final.map: $(OBJS) $(USER_OBJS) /Users/mlvn/STM32CubeIDE/workspace_1.17.0/Exercise_4_Final/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Exercise_4_Final.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/mlvn/STM32CubeIDE/workspace_1.17.0/Exercise_4_Final/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Exercise_4_Final.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -69,14 +69,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Exercise\ Integration.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Exercise Integration.list"
+Exercise_4_Final.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Exercise_4_Final.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Exercise\ Integration.elf Exercise\ Integration.list Exercise\ Integration.map Exercise\\ Integration.elf default.size.stdout
+	-$(RM) Exercise_4_Final.elf Exercise_4_Final.list Exercise_4_Final.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

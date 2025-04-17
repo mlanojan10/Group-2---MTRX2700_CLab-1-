@@ -10,9 +10,11 @@ void timer_initialise_board();
 
 void trigger_prescaler(TIM_TypeDef *TIM);
 
-void init_timer_module(TIM_TypeDef *TIM, uint32_t interval, void (*timer_callback)());
+void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)());
 
-void change_pattern();
+void blink_all_leds();
+
+void blink_alternate_leds();
 
 void TIM2_IRQHandler(void);
 
@@ -24,9 +26,7 @@ void set_timer_period(TIM_TypeDef *TIM, uint32_t new_period);
 
 void reset_timer(TIM_TypeDef *TIM, uint32_t new_period);
 
-void Timer_SetPeriodic(uint32_t ms);
-
-void Timer_TriggerOneShot(uint32_t ms);
+void one_shot(TIM_TypeDef *TIM, uint32_t new_period);
 
 
 #endif
