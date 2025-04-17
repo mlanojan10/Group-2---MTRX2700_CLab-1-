@@ -379,12 +379,10 @@ void one_shot(TIM_TypeDef *TIM, uint32_t delay) {
 	reset_timer(TIM, delay);
 }
 ```
-The OPM function uses capture/compare (CC) event and CC interrupt 
+The OPM function uses the capture/compare (CC) event and CC interrupt to accomplish one-shot operation. The configuration follows instructions from the detailed manual for the STM32F3DISCOVERY board. The delay is determined by setting the CC register to the number of 1ms ticks and CC interrupt is enabled for hardware interrupt. This implementation prevents the program from occupying CPU time due to polling when compared to software solutions.
 
-
-HAVE NOT FINISHED THIS PART
-
-
+Then the current count is equal to the CC register value, the CC interrupt is raised and branches into the same ISR as in previous demonstration. The callback function is executed and the timer is stopped. The CC flag and interrupt is then disabled to prevent false triggers in future timer operation.
+```
 ...
 // If timer is in one-pulse mode reset timer to default mode
 if (TIM2->SR & TIM_SR_CC1IF) {
@@ -394,7 +392,7 @@ if (TIM2->SR & TIM_SR_CC1IF) {
 	TIM2->DIER &= ~TIM_DIER_CC1IE;
 }
 ...
-
+```
 ### Testing
 The two main functions of the timer module can be tested either through changes in functions init_timer_module(), reset_timer() or one_shot() where onboard LEDs will provide a visual aid for proper operations. It is assumed all inputs will be logical and any callback function defined. Delay time should not exceed 2^32-1 or be negative.
 #### Callback function triggered at reguar intervals
