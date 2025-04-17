@@ -394,24 +394,30 @@ if (TIM2->SR & TIM_SR_CC1IF) {
 ...
 ```
 ### Testing
-The two main functions of the timer module can be tested either through changes in functions init_timer_module(), reset_timer() or one_shot() where onboard LEDs will provide a visual aid for proper operations. It is assumed all inputs will be logical and any callback function defined. Delay time should not exceed 2^32-1 or be negative.
+The two main functions of the timer module (i.e. configurable delay and user-defined callback function) can be tested through changing the delay variable in main.c or in functions init_timer_module() where onboard LEDs will provide a visual aid for proper operations. 
+It is assumed all inputs will be logical and any callback function properly defined. 
+Delay time should not exceed 2^32-1 or be negative.
 #### Callback function triggered at reguar intervals
 Input:
 
+```
 ...
+uint32_t delay = 1000;
 init_timer_module(TIM2, blink_all_leds);
-reset_timer(TIM2, 1000);
 ...
+```
 
 Output:
 All LEDs will be on 1000ms/1s and off 1000ms/1s indefinitely.
 
 Input:
 
+```
 ...
+uint32_t delay = 50;
 init_timer_module(TIM2, blink_alternate_leds);
-reset_timer(TIM2, 50);
 ...
+```
 
 Output:
 Every second LED will be on 50ms/0.05s and off 50ms/0.05s indefinitely.
@@ -420,8 +426,8 @@ Every second LED will be on 50ms/0.05s and off 50ms/0.05s indefinitely.
 Input:
 ```
 ...
+uint32_t delay = 1000;
 init_timer_module(TIM2, blink_all_leds);
-one-shot(TIM2, 1000);
 ...
 ```
 Output:
@@ -429,10 +435,12 @@ All LEDs will be turned on and after a 1000ms/1s delay all will turn off and sta
 
 Input:
 
+```
 ...
+uint32_t delay = 50;
 init_timer_module(TIM2, blink_alternate_leds);
-one-shot(TIM2, 50);
 ...
+```
 
 Output:
 Every second LED will be turned on and after a 50ms/0.05s delay all will turn off and stay off indefintely.
