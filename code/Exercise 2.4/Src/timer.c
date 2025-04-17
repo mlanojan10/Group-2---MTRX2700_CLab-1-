@@ -32,8 +32,8 @@ void trigger_prescaler(TIM_TypeDef *TIM) {
 void (*on_timer_interrupt)() = 0x00;
 
 
-// Initialise timer with delay time in ms to trigger a callback function regularly
-// Input: desired timer number to initialise; delay time in ms; callback function
+// Initialise timer with 1ms ticks to trigger a callback function regularly
+// Input: desired timer number to initialise; callback function
 void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)()) {
 
 	TIM->CR1 |= TIM_CR1_CEN;
@@ -45,23 +45,25 @@ void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)()) {
 	on_timer_interrupt = timer_callback;
 }
 
-// Simple function to switch on/off every second led when called
-void change_pattern() {
-
+// Simple function to switch on/off every led when called
+void blink_all_leds() {
 	uint8_t *led_output_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
 	*led_output_register ^= 0b11111111;
+}
+
+// Simple function to switch on/off every second led when called
+void blink_alternate_leds() {
+	uint8_t *led_output_register = ((uint8_t*)&(GPIOE->ODR)) + 1;
+	*led_output_register ^= 0b10101010;
 }
 
 // Interrupt Service Routine
 void TIM2_IRQHandler(void) {
     // Check if the TIM2 interrupt flag is set
     if (TIM2->SR & TIM_SR_UIF) {
-
 		// Run the callback function (make sure it is not null first)
         if (on_timer_interrupt != 0x00) {
-
         	on_timer_interrupt();
-
         	// If timer is in one-pulse mode reset timer to default mode
 			if (TIM2->SR & TIM_SR_CC1IF) {
 				// Disable capture/compare flag
@@ -75,7 +77,7 @@ void TIM2_IRQHandler(void) {
     }
 }
 
-// Intialise hardware interrupt for timer 2
+// Enable hardware interrupt for timer 2
 void enable_timer2_interrupt() {
 	// Disable the interrupts while messing around with the settings
 	// Otherwise can lead to strange behaviour
@@ -84,7 +86,7 @@ void enable_timer2_interrupt() {
 	// Enable update interrupt (UIE)
 	TIM2->DIER |= TIM_DIER_UIE;
 
-	// Tell the NVIC module that EXTI0 interrupts should be handled
+	// Tell the NVIC module that TIM2 interrupts should be handled
 	NVIC_SetPriority(TIM2_IRQn, 1);  // Set Priority
 	NVIC_EnableIRQ(TIM2_IRQn);
 

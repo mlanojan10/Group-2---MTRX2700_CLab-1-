@@ -32,13 +32,13 @@ int main(void)
 	initialise_board();
 
 	// Initialise timer with delay time and callback function
-	init_timer_module(TIM2, change_pattern);
+	init_timer_module(TIM2, blink_all_leds);
 	enable_timer2_interrupt();
-	//reset_timer(TIM2, 1000);
+	reset_timer(TIM2, 1000);
 
 
-	// Uncomment to test function
-	one_shot(TIM2, 2000);
+	// Uncomment to test one-shot function
+	//one_shot(TIM2, 2000);
 
 	/* Loop forever */
 	for(;;) {}

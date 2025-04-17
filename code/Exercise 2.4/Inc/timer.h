@@ -12,7 +12,9 @@ void trigger_prescaler(TIM_TypeDef *TIM);
 
 void init_timer_module(TIM_TypeDef *TIM, void (*timer_callback)());
 
-void change_pattern();
+void blink_all_leds();
+
+void blink_alternate_leds();
 
 void TIM2_IRQHandler(void);
 
