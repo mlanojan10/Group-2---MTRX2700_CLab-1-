@@ -98,8 +98,8 @@ static button_callback_t on_button_press = 0x00;
 
 void EXTI0_IRQHandler(void)
 {
-	if (on_button_press != 0x00) {
-		on_button_press();
+	if (on_button_press != 0x00) { 
+		on_button_press();           //Check if the button is registered as pressed 
 	}
 
 	EXTI->PR |= EXTI_PR_PR0; // clear interrupt flag
