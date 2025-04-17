@@ -94,12 +94,12 @@ Enables the clock for GPIOE.
 Configures PE8–PE15 as outputs.
 
 leds_get_state():
-Reads the current 8-bit state of PE8–PE15.
-Returns this as an 8-bit value.
+- Reads the current 8-bit state of PE8–PE15.
+- Returns this as an 8-bit value.
 
 leds_set_state():
-Updates the state of PE8–PE15 based on an 8-bit bitmask.
-Leaves PE0–PE7 unchanged.
+- Updates the state of PE8–PE15 based on an 8-bit bitmask.
+- Leaves PE0–PE7 unchanged.
 
 Using these functions provides a more modular and safe interface.
 
@@ -114,6 +114,7 @@ TIM2->ARR = 1000;
 f = (8 Mhz)/(7999+1) = 8000000/8000 = 1000 Hz 
 
 Time to overflow = ARR x time per tick 
+
 Time to overflow = 1000 x 1/1000 = 1 second 
 
 
