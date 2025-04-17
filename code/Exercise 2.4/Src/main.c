@@ -31,17 +31,20 @@ int main(void)
 	enable_clocks();
 	initialise_board();
 
-	// Initialise timer with delay time and callback function
+	// This is the interval/delay for timers to trigger in ms
+	uint32_t delay = 1000;
+
+	// Initialise timer with callback function
+	// blink_all_leds can be changed to blink_alternate_leds for testing
 	init_timer_module(TIM2, blink_all_leds);
 	enable_timer2_interrupt();
-	reset_timer(TIM2, 1000);
 
+	// Reset timer with new period and start timer
+	reset_timer(TIM2, delay);
 
 	// Uncomment to test one-shot function
-	//one_shot(TIM2, 2000);
+	//one_shot(TIM2, delay);
 
 	/* Loop forever */
 	for(;;) {}
 }
-
-
