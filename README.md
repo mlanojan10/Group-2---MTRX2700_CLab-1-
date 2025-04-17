@@ -441,7 +441,7 @@ Every second LED will be turned on and after a 50ms/0.05s delay all will turn of
 
 ## Integration 
 The integration tasks encapsulated all 3 modules together to provide a working user interface that can control each function and certain parameters through input into the laptop. All modules have stayed the same as what was explained above, however, there have been some slight changes to ensure proper functionality of the task.
-![Image](https://github.com/user-attachments/assets/78ce1bd6-12cd-4ee3-96a9-8ea3d0a4fc39)
+![Image](https://github.com/user-attachments/assets/32abd551-3bde-4d2e-8db0-c6ee30dced27)
 
 This flowchart depicts the integration task and key compoennts in its functionality.  
 
