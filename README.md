@@ -444,10 +444,21 @@ The integration tasks encapsulated all 3 modules together to provide a working u
 
 This flowchart depicts the integration task and key compoennts in its functionality.  
 
-The main function handles (I am not bothered writing this, someone please do it): 
-- Talk about the if - else statement and how it checks if the input is valid 
-- How the buffer is split into commands and instructions and passed as an argument -double buffers? 
-- How the struct within the main function handles overriding the mode so we get the proper function when a new user request is sent. 
+### Main Function
+
+The main function handles the user interface by interpreting and responding to input commands received over the serial connection. It serves as the integration point for all three modules (Digital IO, Timer, and Serial Output), coordinating their responses based on the user input.
+
+- **Input Validation via If-Else Logic**  
+  When a line of input is received, the `OnLineReceived()` function is triggered via an interrupt-based callback. It uses an `if-else` structure to determine whether the entered command is valid. If the input cannot be split into a command and argument using `sscanf`, it responds with “Invalid input format.” Valid commands like `led`, `serial`, `timer`, or `oneshot` are then handled accordingly, while anything else results in an “Unknown command.”
+
+- **Command Parsing and Buffer Handling**  
+  The function uses two static character buffers (`command` and `argument`) to store the parsed parts of the input. The `sscanf()` function separates the command (e.g., `led`) and the argument (e.g., `10101010`) from the full input string. These buffers act like a form of double-buffering—separating the user input into reusable storage for each part of the instruction—allowing the command logic to remain clean and modular. The `argument` is then passed into the relevant module's function (e.g., `DigitalIO_SetPattern()`).
+
+- **Struct-Based Mode Management**  
+  The `SystemMode` enum and `current_mode` variable provide a simple state machine for the program. Each time a new valid command is processed, `reset_all_modes()` is called first to disable any previously active mode, ensuring that only one module operates at a time. This prevents conflicts like overlapping timer outputs or LED states. Then, `current_mode` is updated based on the new user command, which can be used for any required state-dependent behavior or diagnostics.
+
+This design allows each module to operate independently but still work together under a unified command structure, making the system responsive, robust, and easy to expand.
+
 
 
 #### Digital IO 
