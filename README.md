@@ -226,7 +226,7 @@ Any sequence of characters terminated by `\r` (carriage return) or `\n` (newline
 Testing is performed by connecting to the microcontroller’s serial port using a terminal emulator (e.g., CuteCom or PuTTY). Typed characters are echoed and displayed after pressing Enter. The prompt repeats for the next string.
 
 ### Part B
-This part Enhances the system with a receive callback mechanism, enabling the program to respond automatically once a full line is received, promoting an event-driven structure.
+This part enhances the system with a receive callback mechanism, enabling the program to respond automatically once a full line is received, promoting an event-driven structure.
 
 #### Usage
 
@@ -252,7 +252,7 @@ Testing is performed similar to part A.
 
 ### Part C
 
-This part Implements interrupt-driven reception, allowing background input handling. When a line ends with `\n`, a callback is triggered to echo the input. This removes the need for polling.
+This part implements interrupt-driven reception, allowing background input handling. When a line ends with `\n`, a callback is triggered to echo the input. This removes the need for polling.
 
 #### Usage
 
