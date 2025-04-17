@@ -1,4 +1,0 @@
-../Src/main.c:12:5:__io_putchar	16	static
-../Src/main.c:28:6:reset_all_modes	8	static
-../Src/main.c:41:6:OnLineReceived	152	static
-../Src/main.c:76:5:main	8	static
